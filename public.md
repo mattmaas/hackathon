@@ -216,7 +216,7 @@ Putting it all together:
 ```python
 #instantiate a new Clarifai object
 from clarifai_basic import ClarifaiCustomModel
-concept = ClarifaiCustomModel()
+clarifai = ClarifaiCustomModel()
 
 # give a few positive examples and a custom concept
 clarifai.positive('http://example.com/car.jpg', 'car');
