@@ -157,12 +157,12 @@ class ClarifaiCustomModel(CuratorApiClient):
       pass
 
   def positive(self, url, concept):
-    doc = self.format_doc(url, concept, 1)
-    self.addDocumentToCollection(doc)
+    doc = self._format_doc(url, concept, 1)
+    self.add_document(doc)
 
   def negative(self, url, concept):
-    doc = self.format_doc(url, concept, -1)
-    self.addDocumentToCollection(doc)
+    doc = self._format_doc(url, concept, -1)
+    self.add_document(doc)
 
   def train(self, concept):
     self.train_concept(namespace=self._namespace, cname=concept)
@@ -170,10 +170,7 @@ class ClarifaiCustomModel(CuratorApiClient):
   def predict(self, url, concept):
     return self.predict_concept(namespace=self._namespace, cname=concept, urls=[url])
 
-  def addDocumentToCollection(self, doc):
-    self.add_document(doc)
-
-  def format_doc(self, url, concept, score):
+  def _format_doc(self, url, concept, score):
     return {
       "docid": str(uuid.uuid4()),
       "media_refs": [{
