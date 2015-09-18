@@ -4,7 +4,7 @@ The Clarifai Deep Learning Platform recognizes concepts inside images. These con
 
 ## A Quick Warning!
 
-This API and functionality is experimental and alpha at best. Please email us at support@clarifai.com and let us know what's not working how you'd expect it to work. We want to make this awesome. Please help us do that!
+This API and functionality is experimental and alpha at best. Please email us at hackmit@clarifai.com and let us know what's not working how you'd expect it to work. We want to make this awesome. Please help us do that!
 
 ## Prerequisites
 
