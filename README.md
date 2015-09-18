@@ -10,7 +10,7 @@ Before you begin, please make sure to signup at the special  [HackMIT 2015 Clari
 
 ## Introduction To Custom Training
 
-The Clarifai Deep Learning Platform recognizes concepts inside images. These concepts may be objects, things or even emotions. While the platform recognizes an ever-growing number of concepts, there may be times when you would like to create your own concepts and train the platform to recognize those. We call this Custom Training. 
+The Clarifai Deep Learning Platform recognizes concepts within images. These concepts may be objects, things or even emotions. While the platform recognizes an ever-growing number of concepts, there may be times when you would like to create your own concepts and train the platform to recognize those. We call this Custom Training. 
 
 ## A Quick Warning!
 
@@ -158,7 +158,7 @@ export CLARIFAI_APP_ID=&lt;an_application_id_from_your_account&gt;
 export CLARIFAI_APP_SECRET=&lt;an_application_secret_from_your_account&gt;
 </pre>
 
-Next, get the Clarifai Custom Model API and example scripti `example.py`.
+Next, get the Clarifai Custom Model API and example script `example.py`.
 
 <pre>
 git clone git@github.com:Clarifai/clarifai-HackMIT
