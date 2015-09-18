@@ -14,7 +14,7 @@ Before you begin, please make sure to signup at the special  [HackMIT 2015 Clari
 
 Have a look at [custom-training.md](custom-training.md).That document explains what Custom Training is all about and why it's so cool.
 
-Next have a look at our [Javascript](javascript) and [Python](python) examples. These should help you get started in coding up your beauty. The [data directory](data) has sample .tsv files with a few hundred urls for images that you may find useful.
+Next have a look at our [JavaScript](javascript) and [Python](python) examples. These should help you get started in coding up your beauty. The [data directory](data) has sample .tsv files with a few hundred urls for images that you may find useful.
 
 ## Help
 
