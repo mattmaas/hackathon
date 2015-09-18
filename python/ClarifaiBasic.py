@@ -6,7 +6,6 @@ make it very easy to train your first custom model and then use it for
 predictions.
 
 """
-
 from __future__ import absolute_import
 
 import json
@@ -14,7 +13,8 @@ import uuid
 
 from clarifai.client import ClarifaiApi, ApiError, ApiBadRequestError
 from clarifai.client.client import API_VERSION
-from .request_helper import CuratorApiRequestHelper
+from request_helper import CuratorApiRequestHelper
+
 
 def request(name, method='GET'):
   def decorator(get_body):
@@ -61,7 +61,7 @@ class CuratorApiClient(ClarifaiApi):
                                            base_url='https://api-alpha.clarifai.com',
                                            wait_on_throttle=True)
 
-    self.add_url('document', 'curator/collections/%s/documents' % self.collection_id)
+    self.add_url('document', 'curator/collections/%s/documents' % self._collection_id)
     self.add_url('collections', 'curator/collections')
     self.add_url('concepts', 'curator/concepts')
     self.add_url('concept', 'curator/concepts/{namespace}/{cname}')
