@@ -70,17 +70,12 @@ class CuratorApiClient(ClarifaiApi):
                                            base_url=base_url,
                                            wait_on_throttle=wait_on_throttle)
 
-    self.add_url('collections', 'curator/collections')
     self.add_url('document', 'curator/collections/%s/documents' % self.collection_id)
     self.add_url('index', 'curator/collections')
     self.add_url('concepts', 'curator/concepts')
     self.add_url('concept', 'curator/concepts/{namespace}/{cname}')
     self.add_url('concept_predict', 'curator/concepts/{namespace}/{cname}/predict')
-    self.add_url('concept_examples', 'curator/concepts/{namespace}/{cname}/examples')
     self.add_url('concept_train', 'curator/concepts/{namespace}/{cname}/train')
-    self.add_url('models', 'curator/models')
-    self.add_url('model', 'curator/models/{name}')
-    self.add_url('model_predict', 'curator/models/{name}/predict')
 
   def add_url(self, op, path):
     self._urls[op] = '/'.join([self._base_url, API_VERSION, path])
@@ -189,6 +184,12 @@ class ClarifaiCustomModel(CuratorApiClient):
 
     self.namespace = 'hackathon'
 
+    try:
+      self.put_index({'max_num_docs': 1000})
+    except:
+      pass
+
+
   def positive(self, url, concept):
     doc = self.createDocument(url, concept, 1)
     self.addDocumentToCollection(doc)
@@ -207,13 +208,6 @@ class ClarifaiCustomModel(CuratorApiClient):
     return self.predict_concept(urls=[url], **qualified_concept)
 
   def addDocumentToCollection(self, doc):
-    """
-    """
-    try:
-      self.put_index({'max_num_docs': 1000})
-    except:
-      pass
-
     self.put_document(doc)
 
   def createDocument(self, url, concept, score):
