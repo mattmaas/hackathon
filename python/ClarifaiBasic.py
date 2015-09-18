@@ -71,7 +71,7 @@ class CuratorApiClient(ClarifaiApi):
                                            wait_on_throttle=wait_on_throttle)
 
     self.add_url('document', 'curator/collections/%s/documents' % self.collection_id)
-    self.add_url('index', 'curator/collections')
+    self.add_url('collections', 'curator/collections')
     self.add_url('concepts', 'curator/concepts')
     self.add_url('concept', 'curator/concepts/{namespace}/{cname}')
     self.add_url('concept_predict', 'curator/concepts/{namespace}/{cname}/predict')
@@ -107,8 +107,8 @@ class CuratorApiClient(ClarifaiApi):
                                           kwargs)
     return self.check_status(raw_response)
 
-  def put_index(self, settings, properties=None):
-    url = self._url_for_op('index')
+  def create_collection(self, settings, properties=None):
+    url = self._url_for_op('collections')
     request_data = self.request_helper.index_request_for_put(settings, properties=properties)
     kwargs = {
         'data': request_data,
@@ -175,17 +175,12 @@ class ClarifaiCustomModel(CuratorApiClient):
   def __init__(self, app_id=None, app_secret=None,
                base_url='https://api-alpha.clarifai.com', wait_on_throttle=True,
                collection_id='hackmit'):
-
-    super(ClarifaiCustomModel, self).__init__(app_id=app_id,
-                                              app_secret=app_secret,
-                                              base_url=base_url,
-                                              wait_on_throttle=wait_on_throttle,
+    super(ClarifaiCustomModel, self).__init__(app_id=app_id, app_secret=app_secret,
+                                              base_url=base_url, wait_on_throttle=wait_on_throttle,
                                               collection_id=collection_id)
-
     self.namespace = 'hackathon'
-
     try:
-      self.put_index({'max_num_docs': 1000})
+      self.create_collection({'max_num_docs': 1000})
     except:
       pass
 
