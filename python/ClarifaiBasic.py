@@ -42,7 +42,6 @@ def drop(dictionary, value=None):
 
 
 class CuratorApiError(ApiError):
-
   def __init__(self, status):
     self.status = status
 
@@ -90,9 +89,9 @@ class CuratorApiClient(ClarifaiApi):
     url = self._url_for_op('document')
     request_data = self.request_helper.document_request_for_put(doc, options=options)
     kwargs = {
-        'data': request_data,
-        'method': 'POST'
-        }
+      'data': request_data,
+      'method': 'POST'
+    }
     raw_response = self._get_raw_response(self._get_json_headers,
                                           self._get_json_response,
                                           url,
@@ -103,9 +102,9 @@ class CuratorApiClient(ClarifaiApi):
     url = self._url_for_op('collections')
     request_data = self.request_helper.index_request_for_put(settings, properties=properties)
     kwargs = {
-        'data': request_data,
-        'method': 'POST'
-        }
+      'data': request_data,
+      'method': 'POST'
+    }
     raw_response = self._get_raw_response(self._get_json_headers,
                                           self._get_json_response,
                                           url, kwargs)
@@ -123,11 +122,11 @@ class CuratorApiClient(ClarifaiApi):
       example (Optional): image url with an example of the concept
     """
     return drop({
-        'namespace': namespace,
-        'cname': cname,
-        'description': description,
-        'example': example
-        }, value=None)
+      'namespace': namespace,
+      'cname': cname,
+      'description': description,
+      'example': example
+    }, value=None)
 
   @request('concept_train', method='POST')
   def train_concept(self, namespace, cname, collection_ids=None):
@@ -140,9 +139,9 @@ class CuratorApiClient(ClarifaiApi):
     Predict scores for a single concept, specified by namespace and cname.
     '''
     return drop({
-        'urls': urls,
-        'documents': documents
-        }, value=None)
+      'urls': urls,
+      'documents': documents
+    }, value=None)
 
 
 class ClarifaiCustomModel(CuratorApiClient):
