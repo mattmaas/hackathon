@@ -8,19 +8,17 @@ We are thrilled to offer you early access to the Clarifai Custom Model Training 
 
 ## Signup
 
-Before you begin, please make sure to signup at the special  [HackMIT 2015 Clarifai Signup Page](https://developer-alpha.clarifai.com/signup/HackMIT). This will give you free access to our API. 
+Before you begin, please make sure to signup at the special  [HackMIT 2015 Clarifai Signup Page](https://developer-alpha.clarifai.com/signup/HackMIT). This will give you free access to our alpha API. 
 
 ## Getting Started
 
+Have a look at [custom-training.md](custom-training.md).That document explains what Custom Training is all about and why it's so cool.
 
+Next have a look at our [Javascript](javascript) and [Python](python) examples. These should help you get started in coding up your beauty. The [data](data directory) has sample .tsv files with a few hundred urls for images that you may find useful.
 
-The javascript/ directory has an example.
+## Help
 
-## Python example
+If you need anyhelp at all, please email us (support@clarifai.com), Tweet at us [@clarifaidev](https://twitter.com/clarifaidev) or find one of us at the hackathon (we sent a squad!).
 
-The python/ directory has an example.
-
-## Sample Data
-
-The data directory has sample .tsv files with a few hundred urls for images of different kinds of trains.
+Have fun and good luck!
 
