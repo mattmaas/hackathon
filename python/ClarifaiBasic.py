@@ -14,7 +14,7 @@ import uuid
 
 from clarifai.client import ClarifaiApi, ApiError, ApiBadRequestError
 from clarifai.client.client import API_VERSION
-from request_helper import CuratorApiRequestHelper
+from .request_helper import CuratorApiRequestHelper
 
 def request(name, method='GET'):
   def decorator(get_body):
@@ -54,7 +54,6 @@ class CuratorApiError(ApiError):
 
 
 class CuratorApiClient(ClarifaiApi):
-
   def __init__(self, app_id=None, app_secret=None,
                base_url='https://api.clarifai.com', wait_on_throttle=True,
                collection_id=None, request_helper=None):
@@ -141,10 +140,6 @@ class CuratorApiClient(ClarifaiApi):
   def train_concept(self, namespace, cname, collection_ids=None):
     if collection_ids:
       return {'collection_ids': collection_ids}
-
-  def train(self, namespace, cname, collection_ids=None):
-    # TODO: add model train to train all concepts in model
-    return self.train_concept(namespace, cname, collection_ids)
 
   @request('concept_predict', method='POST')
   def predict_concept(self, namespace, cname, urls=None, documents=None):
