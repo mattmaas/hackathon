@@ -146,17 +146,6 @@ class CuratorApiClient(ClarifaiApi):
     # TODO: add model train to train all concepts in model
     return self.train_concept(namespace, cname, collection_ids)
 
-  def predict(self, namespace, cname=None, urls=None, documents=None):
-    '''
-    Return predictions for all concepts in a model/namespace, or for
-    a particular cname.
-    '''
-    if urls is None and documents is None:
-      raise ValueError('Must supply one of urls or documents to predict')
-    if cname is None:
-      return self.predict_model(namespace, urls=urls, documents=documents)
-    return self.predict_concept(namespace, cname, urls=urls, documents=documents)
-
   @request('concept_predict', method='POST')
   def predict_concept(self, namespace, cname, urls=None, documents=None):
     '''
@@ -166,6 +155,7 @@ class CuratorApiClient(ClarifaiApi):
         'urls': urls,
         'documents': documents
         }, value=None)
+
 
 class ClarifaiCustomModel(CuratorApiClient):
   """The ClarifaiCustomModel class provides a simple interface
