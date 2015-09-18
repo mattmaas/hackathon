@@ -169,7 +169,7 @@ Success 0.273 http://www.mediaspin.com/joel/grateful_dead230582_15-52.jpg
 Instantiate a ClarifaiCustomModel object. This is your custom **Concept**:
 
 ```python
-from ClarifaiBasic import ClarifaiCustomModel
+from clarifai_basic import ClarifaiCustomModel
 concept = ClarifaiCustomModel()
 ```
 
@@ -215,7 +215,7 @@ Putting it all together:
 
 ```python
 #instantiate a new Clarifai object
-from ClarifaiBasic import ClarifaiCustomModel
+from clarifai_basic import ClarifaiCustomModel
 concept = ClarifaiCustomModel()
 
 # give a few positive examples and a custom concept

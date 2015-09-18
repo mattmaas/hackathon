@@ -4,7 +4,7 @@ Simple example showing Clarifai Custom Model training and prediction
 This example trains a concept classifier that recognizes photos of the band Phish.
 """
 
-from ClarifaiBasic import ClarifaiCustomModel
+from clarifai_basic import ClarifaiCustomModel
 
 
 # instantiate clarifai client
@@ -42,7 +42,6 @@ for negative_example in PHISH_NEGATIVES:
 
 # train the model
 clarifai.train('phish')
-
 
 
 PHISH_EXAMPLES = [
