@@ -18,7 +18,7 @@ Next have a look at our [Javascript](javascript) and [Python](python) examples. 
 
 ## Help
 
-If you need anyhelp at all, please email us (support@clarifai.com), Tweet at us [@clarifaidev](https://twitter.com/clarifaidev) or find one of us at the hackathon (we sent a squad!).
+If you need anything at all, please email us (support@clarifai.com), Tweet at us [@clarifaidev](https://twitter.com/clarifaidev) or find one of us at the hackathon (we sent a squad!).
 
 Have fun and good luck!
 
