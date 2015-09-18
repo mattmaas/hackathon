@@ -89,7 +89,7 @@ class CuratorApiClient(ClarifaiApi):
       raise CuratorApiError(response['status'])
     return response
 
-  def put_document(self, doc, options=None):
+  def add_document(self, doc, options=None):
     docid = doc.get('docid')
     if not docid:
       raise ApiBadRequestError('Missing required param: doc.docid')
@@ -188,7 +188,7 @@ class ClarifaiCustomModel(CuratorApiClient):
     return self.predict_concept(urls=[url], **qualified_concept)
 
   def addDocumentToCollection(self, doc):
-    self.put_document(doc)
+    self.add_document(doc)
 
   def createDocument(self, url, concept, score):
     doc = {
