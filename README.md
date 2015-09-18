@@ -107,16 +107,16 @@ var clarifai = new Clarifai(
   }
 );
 
-// give a few positive examples and a custom concept
+// Give a few positive examples and a name for the custom concept.
 clarifai.positive('http://example.com/car.jpg', 'car');
 
-// give a few negative examples and a custom concept
+// Give a few negative examples and a name for the custom concept.
 clarifai.negative('http://example.com/not-a-car.jpg', 'car');
 
-// train the platform on your custom concept
+// Train the platform on your custom concept.
 clarifai.train('car');
 
-// ask the platform to make a prediction on a new image and your custom concept
+// Ask for a prediction on a new image with your custom concept.
 clarifai.predict('http://example.com/a-new-car.jpg', 'car');
 ```
 
@@ -228,19 +228,19 @@ Putting it all together:
 from clarifai_basic import ClarifaiCustomModel
 clarifai = ClarifaiCustomModel()
 
-# give a few positive examples and a custom concept
+# Give a few positive examples and a name for the custom concept.
 clarifai.positive('http://example.com/car.jpg', 'car');
 
-# give a few negative examples and a custom concept
+# Give a few negative examples and a name for the custom concept.
 clarifai.negative('http://example.com/not-a-car.jpg', 'car');
 
-# train the platform to learn your custom concept
+# Train the platform to learn your custom concept.
 clarifai.train('car');
 
-# ask the platform to make a prediction on a new image and your custom concept
+# Ask for a prediction on a new image with your custom concept.
 result = clarifai.predict('http://example.com/a-new-car.jpg', 'car');
 
-# get the confidence that this image is a car
+# Get the confidence that this image is a car.
 confidence = result['urls'][0]['score']
 ```
 
