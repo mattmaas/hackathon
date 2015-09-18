@@ -54,20 +54,13 @@ class CuratorApiError(ApiError):
 
 
 class CuratorApiClient(ClarifaiApi):
-  def __init__(self, app_id=None, app_secret=None,
-               base_url='https://api.clarifai.com', wait_on_throttle=True,
-               collection_id=None, request_helper=None):
-    # FIXME: this is optional now, e.g. if we want to do GET /collections.  Error check later.
-    #if not collection_id:
-    #  raise Exception('Missing required param: collection_id.')
-    self.collection_id = collection_id
-    self.request_helper = request_helper
-    if self.request_helper is None:
-      self.request_helper = CuratorApiRequestHelper(collection_id=collection_id)
+  def __init__(self, app_id=None, app_secret=None):
+    self._collection_id = 'hackmit'
+    self.request_helper = CuratorApiRequestHelper(collection_id=self._collection_id)
     super(CuratorApiClient, self).__init__(app_id=app_id,
                                            app_secret=app_secret,
-                                           base_url=base_url,
-                                           wait_on_throttle=wait_on_throttle)
+                                           base_url='https://api-alpha.clarifai.com',
+                                           wait_on_throttle=True)
 
     self.add_url('document', 'curator/collections/%s/documents' % self.collection_id)
     self.add_url('collections', 'curator/collections')
@@ -153,74 +146,54 @@ class CuratorApiClient(ClarifaiApi):
 
 
 class ClarifaiCustomModel(CuratorApiClient):
-  """The ClarifaiCustomModel class provides a simple interface
-  to the Clarifai custom model training API
   """
-
-  def __init__(self, app_id=None, app_secret=None,
-               base_url='https://api-alpha.clarifai.com', wait_on_throttle=True,
-               collection_id='hackmit'):
-    super(ClarifaiCustomModel, self).__init__(app_id=app_id, app_secret=app_secret,
-                                              base_url=base_url, wait_on_throttle=wait_on_throttle,
-                                              collection_id=collection_id)
-    self.namespace = 'hackathon'
+  The ClarifaiCustomModel class provides a simple interface to the Clarifai custom training API
+  """
+  def __init__(self, app_id=None, app_secret=None):
+    super(ClarifaiCustomModel, self).__init__(app_id=app_id, app_secret=app_secret)
+    self._namespace = 'hackathon'
     try:
       self.create_collection({'max_num_docs': 1000})
     except:
       pass
 
-
   def positive(self, url, concept):
-    doc = self.createDocument(url, concept, 1)
+    doc = self.format_doc(url, concept, 1)
     self.addDocumentToCollection(doc)
 
   def negative(self, url, concept):
-    doc = self.createDocument(url, concept, -1)
+    doc = self.format_doc(url, concept, -1)
     self.addDocumentToCollection(doc)
 
   def train(self, concept):
-    qualified_concept = {'namespace' : self.namespace, 'cname': concept}
-
-    self.train_concept(**qualified_concept)
+    self.train_concept(namespace=self._namespace, cname=concept)
 
   def predict(self, url, concept):
-    qualified_concept = {'namespace' : self.namespace, 'cname': concept}
-    return self.predict_concept(urls=[url], **qualified_concept)
+    return self.predict_concept(namespace=self._namespace, cname=concept, urls=[url])
 
   def addDocumentToCollection(self, doc):
     self.add_document(doc)
 
-  def createDocument(self, url, concept, score):
-    doc = {
-        "docid": str(uuid.uuid4()),
-        "media_refs": [
-            {
-                "url": url,
-                "media_type": "image"
-            }
-            ],
-        "annotation_sets": [
-            {
-                "namespace": self.namespace,
-                "annotations": [
-                    {
-                        "score": score,
-                        "tag": {
-                            "cname": concept
-                        }
-                    }
-                    ]
-            }
-            ],
-        'options': {
-            'want_doc_response': True,
-            'recognition_options':
-                {
-                    'model': 'general-v1.2'
-                }
-            }
+  def format_doc(self, url, concept, score):
+    return {
+      "docid": str(uuid.uuid4()),
+      "media_refs": [{
+        "url": url,
+        "media_type": "image"
+      }],
+      "annotation_sets": [{
+        "namespace": self._namespace,
+        "annotations": [{
+          "score": score,
+          "tag": {
+            "cname": concept
+          }
+        }]
+      }],
+      'options': {
+        'want_doc_response': True,
+        'recognition_options': {
+          'model': 'general-v1.2'
         }
-    return doc
-
-
-
+      }
+    }
