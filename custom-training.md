@@ -10,7 +10,7 @@ This API and functionality is experimental and alpha at best. Please email us at
 
 This guide assumes that you have:
 
-1. Created a developer account at https://developer-alpha.clarifai.com/docs/
+1. Created a developer account at https://developer-alpha.clarifai.com/signup/HackMIT
 2. Created an Application https://developer-alpha.clarifai.com/docs/applications
 3. Generated an Access Token from your Application page
 
