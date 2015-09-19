@@ -47,13 +47,13 @@ clarifai.train('phish')
 
 
 PHISH_EXAMPLES = [
-  'http://phishthoughts.com/wp-content/uploads/2012/07/photo-1-11-e1342391144673.jpg',
-  'http://bobmarley.cdn.junip.com/wp-content/uploads/2014/10/DSC01226-e1311293061704.jpg'
+  'https://clarifai-test.s3.amazonaws.com/photo-1-11-e1342391144673.jpg',
+  'https://clarifai-test.s3.amazonaws.com/DSC01226-e1311293061704.jpg'
 ]
 
 NOT_PHISH = [
-  'http://farm3.static.flickr.com/2161/2141620332_2b741028b3.jpg',
-  'http://www.mediaspin.com/joel/grateful_dead230582_15-52.jpg'
+  'https://clarifai-test.s3.amazonaws.com/2141620332_2b741028b3.jpg',
+  'https://clarifai-test.s3.amazonaws.com/grateful_dead230582_15-52.jpg'
 ]
 
 # If everything works correctly, the confidence that true positive images are of Phish should be
