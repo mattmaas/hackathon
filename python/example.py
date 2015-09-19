@@ -13,13 +13,13 @@ clarifai = ClarifaiCustomModel()
 
 # find some positive and negative examples
 PHISH_POSITIVES = [
-  'http://thephunion.com/wp-content/uploads/2013/04/Umphreys.jpg',
-  'http://images2.miaminewtimes.com/imager/phish-switched-from-suck-to-blow-for-new'
-  '/u/original/6471847/phish_review_photos_new_years_2015_miami_2.jpg',
-  'http://phishthoughts.com/wp-content/uploads/2009/06/Phish06212009_17.jpg',
-  'http://www.performanceimpressions.com/Phish_Bonnaroo_2012/content/bin/images/'
-  'large/Bonnaroo_Music_Festival_Phish_opp4680.jpg',
-  'https://mrminer.files.wordpress.com/2008/11/phish-lights1.jpg'
+  'http://clarifai-test.s3.amazonaws.com/phish/positive/3652848536_c72244dc88_o.jpg',
+  'http://clarifai-test.s3.amazonaws.com/phish/positive/4840976460_8463f9f319_b.jpg',
+  'http://clarifai-test.s3.amazonaws.com/phish/positive/4904257471_20c0ff714f_b.jpg',
+  'http://clarifai-test.s3.amazonaws.com/phish/positive/4904842036_6806f5fd25_b.jpg',
+  'http://clarifai-test.s3.amazonaws.com/phish/positive/4904845798_aaf3392666_b.jpg',
+  'http://clarifai-test.s3.amazonaws.com/phish/positive/6030148539_5d6da277c0_b.jpg',
+  'http://clarifai-test.s3.amazonaws.com/phish/positive/9381652037_7e5e7665ab_k.jpg'
 ]
 
 # add the positive example images to the model
@@ -29,11 +29,13 @@ for positive_example in PHISH_POSITIVES:
 
 # negatives are not required but will help if you want to discriminate between similar concepts
 PHISH_NEGATIVES = [
-  'http://news.psu.edu/sites/default/files/styles/photo_gallery_large/public/4946277043.jpg',
-  'http://www.weqx.com/wp-content/uploads/2014/03/dmb2.jpg',
-  'http://extras.mnginteractive.com/live/media/site569/2013/1025/20131025__131101wlbb-kanye.jpg',
-  'https://upload.wikimedia.org/wikipedia/commons/b/bf/Grateful_Dead_at_the_Warfield-01.jpg',
-  'http://www.kellitravels.com/wp-content/uploads/2010/08/8-23-11-Dave-Matthews-Band.jpg'
+  'http://clarifai-test.s3.amazonaws.com/phish/negative/5587410471_cf932bf9fa_o.jpg',
+  'http://clarifai-test.s3.amazonaws.com/phish/negative/7367377586_f5e7c59ef8_k.jpg',
+  'http://clarifai-test.s3.amazonaws.com/phish/negative/8422034157_1fbe437d3a_b.jpg',
+  'http://clarifai-test.s3.amazonaws.com/phish/negative/8464327405_5eaf39e6e2_o.jpg',
+  'http://clarifai-test.s3.amazonaws.com/phish/negative/8804958484_9dcba3da19_k.jpg',
+  'http://clarifai-test.s3.amazonaws.com/phish/negative/8805067594_f2abc5c751_k.jpg',
+  'http://clarifai-test.s3.amazonaws.com/phish/negative/9583629691_a1594637a9_k.jpg'
 ]
 
 # add the negative example images to the model
