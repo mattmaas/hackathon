@@ -10,6 +10,7 @@ from clarifai_basic import ClarifaiCustomModel
 # instantiate clarifai client
 clarifai = ClarifaiCustomModel()
 
+concept_name = 'phish'
 
 # find some positive and negative examples
 PHISH_POSITIVES = [
@@ -24,7 +25,7 @@ PHISH_POSITIVES = [
 
 # add the positive example images to the model
 for positive_example in PHISH_POSITIVES:
-  clarifai.positive(positive_example, 'phish')
+  clarifai.positive(positive_example, concept_name)
 
 
 # negatives are not required but will help if you want to discriminate between similar concepts
@@ -40,10 +41,10 @@ PHISH_NEGATIVES = [
 
 # add the negative example images to the model
 for negative_example in PHISH_NEGATIVES:
-  clarifai.negative(negative_example, 'phish')
+  clarifai.negative(negative_example, concept_name)
 
 # train the model
-clarifai.train('phish')
+clarifai.train(concept_name)
 
 
 PHISH_EXAMPLES = [
@@ -62,7 +63,7 @@ NOT_PHISH = [
 
 # use the model to predict whether the test images are Phish or not
 for test in PHISH_EXAMPLES + NOT_PHISH:
-  result = clarifai.predict(test, 'phish')
+  result = clarifai.predict(test, concept_name)
   print result['status']['message'], "%0.3f" % result['urls'][0]['score'], result['urls'][0]['url']
 
 # Our output is the following. Your results will vary as there are some non-deterministic elements

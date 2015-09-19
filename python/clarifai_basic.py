@@ -9,6 +9,7 @@ predictions.
 from __future__ import absolute_import
 
 import json
+import re
 import uuid
 
 from clarifai.client import ClarifaiApi, ApiError, ApiBadRequestError
@@ -130,6 +131,8 @@ class CuratorApiClient(ClarifaiApi):
 
   @request('concept_train', method='POST')
   def train_concept(self, namespace, cname, collection_ids=None):
+    if not re.match(r'^[A-Za-z0-09-_]+$', cname):
+      raise ApiError('Concept name cannot contain whitespace or punctuation: "%s"' % cname)
     if collection_ids:
       return {'collection_ids': collection_ids}
 
