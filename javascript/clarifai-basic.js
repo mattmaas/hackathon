@@ -290,15 +290,23 @@ Clarifai.prototype.createCollection = function(collectionId){
             }
         }.bind(this),
         function(e){
-            console.error("Clarifai: Error instantiating Clarifai object", e);
-            console.error(e.responseJSON.status_msg);
-            if(e.responseJSON.status_msg === 'Token is not valid. Please use valid tokens for a application in your account.'){
-                console.info("Please make sure you are using a valid accessToken https://developer-alpha.clarifai.com/docs/auth");
+            if(e.status === 409){
+                var result = {
+                    'success': true
+                }
+                deferred.resolve(result);
             }
-            var result = {
-                'success': false
+            else{
+                console.error("Clarifai: Error instantiating Clarifai object", e);
+                console.error(e.responseJSON.status_msg);
+                if(e.responseJSON.status_msg === 'Token is not valid. Please use valid tokens for a application in your account.'){
+                    console.info("Please make sure you are using a valid accessToken https://developer-alpha.clarifai.com/docs/auth");
+                }
+                var result = {
+                    'success': false
+                }
+                deferred.resolve(result);
             }
-            deferred.resolve(result);
         }.bind(this)
     );
     return deferred;
