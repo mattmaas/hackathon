@@ -68,6 +68,7 @@ class CuratorApiClient(ClarifaiApi):
     self.add_url('concept', 'curator/concepts/{namespace}/{cname}')
     self.add_url('concept_predict', 'curator/concepts/{namespace}/{cname}/predict')
     self.add_url('concept_train', 'curator/concepts/{namespace}/{cname}/train')
+    self.add_url('model_predict', 'curator/models/{name}/predict')
 
   def add_url(self, op, path):
     self._urls[op] = '/'.join([self._base_url, API_VERSION, path])
@@ -146,6 +147,23 @@ class CuratorApiClient(ClarifaiApi):
       'documents': documents
     }, value=None)
 
+  @request('model_predict', method='POST')
+  def predict_model(self, name, urls=None, documents=None):
+    '''
+    Predict tags for the urls.
+
+    Args:
+      model_name:
+        Namespace or model name. This will return predictions for all concepts
+        in the model.  If a namespace, uses all concepts in the namespace.
+      urls:
+        List of urls to find tag predictions.
+    '''
+    return drop({
+      'urls': urls,
+      'documents': documents
+    }, value=None)
+
 
 class ClarifaiCustomModel(CuratorApiClient):
   """
@@ -172,6 +190,9 @@ class ClarifaiCustomModel(CuratorApiClient):
 
   def predict(self, url, concept):
     return self.predict_concept(namespace=self._namespace, cname=concept, urls=[url])
+
+  def predict_all(self, url):
+    return self.predict_model(name=self._namespace, urls=[url])
 
   def _format_doc(self, url, concept, score):
     return {
