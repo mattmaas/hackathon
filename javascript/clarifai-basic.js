@@ -243,20 +243,99 @@ Clarifai.prototype.addDocumentToCollection = function(obj){
 // Create a Collection. A Collection represents a group of Documents.
 Clarifai.prototype.createCollection = function(collectionId){
     var deferred = $.Deferred();
-    var data = {
-        'collection': {
-            'id': collectionId,
-            'settings': {
-                'max_num_docs': 100000
+    this.listCollections().then(
+        function(collectionCreated){
+            if(collectionCreated === true){
+                var result = {
+                    'success': true
+                }
+                deferred.resolve(result);   
             }
-        }
-    }
+            else{
+                var data = {
+                    'collection': {
+                        'id': collectionId,
+                        'settings': {
+                            'max_num_docs': 100000
+                        }
+                    }
+                }
+                $.ajax(
+                    {
+                        'type': 'POST',
+                        'url': this.baseUrl + 'curator/collections',
+                        'data': JSON.stringify(data),
+                        'processData': false,
+                        'contentType': 'application/json; charset=utf-8',
+                        'headers': {
+                            'Authorization': 'Bearer ' + this.accessToken
+                        }
+                    }  
+                ).then(
+                    function(json){
+                        if(json.status.status === "OK"){
+                            this.log("Clarifai: Collection: '" + collectionId + "' created");
+                            this.collectionCreated = true;
+                            localStorage.setItem('clarifaiCollection_' + collectionId, JSON.stringify(true));
+                            var result = {
+                                'success': true
+                            }
+                            deferred.resolve(result);
+                        }
+                        if(json.status.status === 'ERROR'){
+                            if(json.status.message.indexOf('Bad request: Collection "' + collectionId + '" already exists for user') !== -1){
+                                this.collectionCreated = true;
+                                var result = {
+                                    'success': true
+                                }
+                                deferred.resolve(result);
+                            }
+                            else{
+                                console.error("Clarifai: Error instantiating Clarifai object", json);
+                                var result = {
+                                    'success': false
+                                }
+                                deferred.resolve(result);
+                            }
+                        }
+                    }.bind(this),
+                    function(e){
+                        if(e.status === 409){
+                            var result = {
+                                'success': true
+                            }
+                            localStorage.setItem('clarifaiCollection_' + collectionId, JSON.stringify(true));
+                            deferred.resolve(result);
+                        }
+                        else{
+                            console.error("Clarifai: Error instantiating Clarifai object", e);
+                            console.error(e.responseJSON.status_msg);
+                            if(e.responseJSON.status_msg === 'Token is not valid. Please use valid tokens for a application in your account.'){
+                                console.info("Please make sure you are using a valid accessToken https://developer-alpha.clarifai.com/docs/auth");
+                            }
+                            var result = {
+                                'success': false
+                            }
+                            deferred.resolve(result);
+                        }
+                    }.bind(this)
+                );
+            }
+        }.bind(this),
+        function(e){
+            deferred.reject(e);        
+        }.bind(this)
+    );
+    return deferred;
+}
+
+Clarifai.prototype.listCollections = function(){
+    var deferred = $.Deferred();
+    var collectionCreated = false;
     $.ajax(
         {
-            'type': 'POST',
+            'type': 'GET',
             'url': this.baseUrl + 'curator/collections',
-            'data': JSON.stringify(data),
-            'processData': false,
             'contentType': 'application/json; charset=utf-8',
             'headers': {
                 'Authorization': 'Bearer ' + this.accessToken
@@ -264,49 +343,20 @@ Clarifai.prototype.createCollection = function(collectionId){
         }  
     ).then(
         function(json){
-            if(json.status.status === "OK"){
-                this.log("Clarifai: Collection: '" + collectionId + "' created");
-                this.collectionCreated = true;
-                var result = {
-                    'success': true
-                }
-                deferred.resolve(result);
-            }
-            if(json.status.status === 'ERROR'){
-                if(json.status.message.indexOf('Bad request: Collection "' + collectionId + '" already exists for user') !== -1){
-                    this.collectionCreated = true;
-                    var result = {
-                        'success': true
+            if(json.status.status === 'OK'){
+                for(var i = 0; i < json.collections.length; i++){
+                    var collectionId = json.collections[i].id;
+                    if(collectionId === this.collectionId){
+                        collectionCreated = true;
+                        break;
                     }
-                    deferred.resolve(result);
-                }
-                else{
-                    console.error("Clarifai: Error instantiating Clarifai object", json);
-                    var result = {
-                        'success': false
-                    }
-                    deferred.resolve(result);
                 }
             }
+            deferred.resolve(collectionCreated);
         }.bind(this),
         function(e){
-            if(e.status === 409){
-                var result = {
-                    'success': true
-                }
-                deferred.resolve(result);
-            }
-            else{
-                console.error("Clarifai: Error instantiating Clarifai object", e);
-                console.error(e.responseJSON.status_msg);
-                if(e.responseJSON.status_msg === 'Token is not valid. Please use valid tokens for a application in your account.'){
-                    console.info("Please make sure you are using a valid accessToken https://developer-alpha.clarifai.com/docs/auth");
-                }
-                var result = {
-                    'success': false
-                }
-                deferred.resolve(result);
-            }
+            console.error(e);
+            deferred.reject();
         }.bind(this)
     );
     return deferred;
