@@ -1,14 +1,14 @@
-# clarifai-HackMIT
+# Clarifai Hackathon
 
 ## Welcome Hackers!
 
 We are thrilled to offer you early access to the Clarifai Custom Model Training APIs. These APIs have never been used outside of our walls so we can't wait to see what awesome hacks are built on top of them. 
 
-> Note: in addition to this brand-new custom training support, we also offer a suite of visual recognition and tagging APIs. You can find more information at our [developer site](https://developer.clarifai.com/docs/). Additional resources, including clients in a variety of languages, can be found on our [Github page](https://github.com/Clarifai).
+> Note: in addition to this brand-new custom training support, we also offer a suite of visual recognition and tagging APIs. You can find more information at our [developer site](https://developer.clarifai.com/docs/). Additional resources, including clients in a variety of languages, can be found on our main [Github page](https://github.com/Clarifai).
 
 ## Signup
 
-Before you begin, please make sure to signup at the special  [HackMIT 2015 Clarifai Signup Page](https://developer-alpha.clarifai.com/signup/HackMIT). This will give you free access to our alpha API. 
+Before you begin, please make sure to sign up for an account. We have a special dedicated signup page for hackathons. If you didn't recieve an email from us with a link, please find us on-site or email us hackathon@clarifai.com
 
 ## Introduction To Custom Training
 
@@ -16,7 +16,7 @@ The Clarifai Deep Learning Platform recognizes concepts within images. These con
 
 ## A Quick Warning!
 
-This API and functionality is experimental and alpha at best. Please email us at hackmit@clarifai.com and let us know what's not working how you'd expect it to work. We want to make this awesome. Please help us do that!
+This API and functionality is experimental and alpha at best. Please email us at hackathon@clarifai.com and let us know what's not working how you'd expect it to work. We want to make this awesome. Please help us do that!
 
 **Please note:** The API endpoint for Custom Training is https://api**-alpha**.clarifai.com. It's important to use this and not our production endpoint. 
 
@@ -24,8 +24,8 @@ This API and functionality is experimental and alpha at best. Please email us at
 
 This guide assumes that you have:
 
-1. Created a developer account at https://developer-alpha.clarifai.com/signup/HackMIT
-2. Created an Application https://developer-alpha.clarifai.com/docs/applications
+1. Created a developer account
+2. Created an Application https://developer.clarifai.com/docs/applications
 3. Generated an Access Token from your Application page
 
 ## Getting Started
@@ -251,7 +251,7 @@ Remember, the more **Positive** and **Negative** images you supply, the better t
 
 ## Help
 
-If you need anything at all, please email us (hackmit@clarifai.com), Tweet at us [@clarifaidev](https://twitter.com/clarifaidev) or find one of us at the hackathon (we sent a squad!).
+If you need anything at all, please email us (hackathon@clarifai.com), Tweet at us [@clarifaidev](https://twitter.com/clarifaidev) or find one of us at the hackathon (we sent a squad!).
 
 Have fun and good luck!
 
