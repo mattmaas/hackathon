@@ -162,8 +162,8 @@ export CLARIFAI_APP_SECRET=&lt;an_application_secret_from_your_account&gt;
 Next, get the Clarifai Custom Model API and example script `example.py`.
 
 <pre>
-git clone git@github.com:Clarifai/clarifai-hackathon
-cd clarifai-hackathon
+git clone git@github.com:Clarifai/hackathon
+cd hackathon
 </pre>
 
 #### Run example.py
