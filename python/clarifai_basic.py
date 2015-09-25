@@ -171,7 +171,7 @@ class ClarifaiCustomModel(CuratorApiClient):
   """
   def __init__(self, app_id=None, app_secret=None):
     super(ClarifaiCustomModel, self).__init__(app_id=app_id, app_secret=app_secret)
-    self._namespace = 'hackathon'
+    self._namespace = 'default'
     try:
       self.create_collection({'max_num_docs': 1000})
     except:
