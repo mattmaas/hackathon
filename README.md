@@ -25,7 +25,7 @@ This guide assumes that you have:
 
 1. Created a developer account
 2. Created an Application https://developer-alpha.clarifai.com/docs/applications
-3. Generated an Access Token from your Application page (you can also get an access token via the [/v1/token endpoint](https://developer-alpha.clarifai.com/docs/auth))
+3. Located your Client ID and Client Secret https://developer-alpha.clarifai.com/docs/auth))
 
 ## Getting Started
 
@@ -56,12 +56,17 @@ Be sure to also include jQuery:
 <script type="text/javascript" src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
 ```
 
-On document ready, instantiate the Clarifai object with your access token:
+On document ready, instantiate the Clarifai object with your clientId and clientSecret:
 
 ```js
 $(document).ready(
   function(){
-      var clarifai = new Clarifai({{ YOUR_ACCESS_TOKEN }});
+      var clarifai = new Clarifai(
+          {
+            'clientId': 'YOUR_CLIENT_ID',
+            'clientSecret': 'YOUR_CLIENT_SECRET' 
+          }
+      );
   }  
 );
 ```
