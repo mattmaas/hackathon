@@ -3,7 +3,7 @@
 
 We are thrilled to offer you early access to the Clarifai Custom Model Training APIs. These APIs have never been used outside of our walls so we can't wait to see what awesome hacks are built on top of them. 
 
-> Note: in addition to this brand-new custom training support, we also offer a suite of visual recognition and tagging APIs. You can find more information at our [developer site](https://developer.clarifai.com/docs/). Additional resources, including clients in a variety of languages, can be found on our main [GitHub page](https://github.com/Clarifai).
+> Note: in addition to this brand-new custom training support, we also offer a suite of visual recognition and tagging APIs. You can find more information at our [developer site](https://developer-alpha.clarifai.com/docs/). Additional resources, including clients in a variety of languages, can be found on our main [GitHub page](https://github.com/Clarifai).
 
 ## Signup
 
@@ -24,8 +24,8 @@ This API and functionality is experimental and alpha. Please email us at hackers
 This guide assumes that you have:
 
 1. Created a developer account
-2. Created an Application https://developer.clarifai.com/docs/applications
-3. Generated an Access Token from your Application page (you can also get an access token via the [/v1/token endpoint](https://developer.clarifai.com/docs/auth))
+2. Created an Application https://developer-alpha.clarifai.com/docs/applications
+3. Generated an Access Token from your Application page (you can also get an access token via the [/v1/token endpoint](https://developer-alpha.clarifai.com/docs/auth))
 
 ## Getting Started
 
