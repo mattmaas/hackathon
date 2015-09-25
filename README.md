@@ -25,7 +25,7 @@ This guide assumes that you have:
 
 1. Created a developer account
 2. Created an Application https://developer-alpha.clarifai.com/docs/applications
-3. Located your Client ID and Client Secret https://developer-alpha.clarifai.com/docs/auth))
+3. Located your Client ID and Client Secret https://developer-alpha.clarifai.com/docs/auth
 
 ## Getting Started
 
