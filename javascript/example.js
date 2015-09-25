@@ -4,7 +4,8 @@ var clarifai;
 function init(){
     clarifai = new Clarifai(
         {
-            'accessToken': 'YOUR_TOKEN_HERE'
+            'clientId': 'YOUR_CLIENT_ID',
+            'clientSecret': 'YOUR_CLIENT_SECRET'
         }
     );
 }
