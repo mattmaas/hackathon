@@ -23,7 +23,7 @@ This API and functionality is experimental and alpha. Please email us at hackers
 
 This guide assumes that you have:
 
-1. Created a developer account
+1. Created a developer account https://developer-alpha.clarifai.com
 2. Created an Application https://developer-alpha.clarifai.com/docs/applications
 3. Generated an Access Token from your Application page (you can also get an access token via the [/v1/token endpoint](https://developer-alpha.clarifai.com/docs/auth))
 
