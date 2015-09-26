@@ -9,13 +9,6 @@ We are thrilled to offer you early access to the Clarifai Custom Model Training 
 
 Before you begin, please make sure to sign up for an account. **We have a special dedicated signup page for hackathons with extra free stuff!** If you didn't recieve the link to access it for your particular event, please find us onsite or email us at hackers@clarifai.com.
 
-###We are at many global events, please select your signup page below:
-####OktoberHackFest 2015
-https://developer-alpha.clarifai.com/signup/ohf2015
-
-####HackNY
-https://developer-alpha.clarifai.com/signup/hackny2015
-
 ## Introduction To Custom Training
 
 The Clarifai Deep Learning Platform recognizes concepts within images. These concepts may be objects, things or even emotions. While the platform recognizes an ever-growing number of concepts, there may be times when you would like to create your own concepts and train the platform to recognize those. We call this Custom Training. 
