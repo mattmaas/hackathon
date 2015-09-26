@@ -159,7 +159,7 @@ from the developer site, the API will retrieve one for you as long as you set
 your environment variables.
 
 <pre>
-pip install git+git://github.com/Clarifai/Clarifai_py.git
+pip install git+git://github.com/Clarifai/clarifai-python.git
 export CLARIFAI_APP_ID=&lt;an_application_id_from_your_account&gt;
 export CLARIFAI_APP_SECRET=&lt;an_application_secret_from_your_account&gt;
 </pre>
