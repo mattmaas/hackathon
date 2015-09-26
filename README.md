@@ -19,6 +19,8 @@ This API and functionality is experimental and alpha. Please email us at hackers
 
 **Please note:** The API endpoint for Custom Training is https://api**-alpha**.clarifai.com. It's important to use this and not our production endpoint. 
 
+> If you run into any issues with the clients or the API please [file an issue in this repo](https://github.com/Clarifai/hackathon/issues/new).
+
 ## Prerequisites
 
 This guide assumes that you have:
