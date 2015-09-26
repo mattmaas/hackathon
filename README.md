@@ -198,7 +198,7 @@ concept.positive('http://example.com/car.jpg', 'car' );
 Provide some **Negative** example images for your custom **Concept**:
 
 ```python
-concept.negative('http://example.com/not-a-car.jpg', 'car' );
+concept.negative('http://example.com/not-a-car.jpg', 'car' )
 ```
 
 After providing a few **Positive** examples and a few **Negative** examples, **Train** the platform with your **Concept**:
@@ -210,7 +210,7 @@ concept.train('car');
 Now send some images and **Predict** whether they contain your custom **Concept**:
 
 ```python
-result = concept.predict('http://example.com/maybe-a-car.jpg', 'car');
+result = concept.predict('http://example.com/maybe-a-car.jpg', 'car')
 ```
 
 You will receive a **Prediction** response:
@@ -235,16 +235,16 @@ from clarifai_basic import ClarifaiCustomModel
 clarifai = ClarifaiCustomModel()
 
 # Give a few positive examples and a name for the custom concept.
-clarifai.positive('http://example.com/car.jpg', 'car');
+clarifai.positive('http://example.com/car.jpg', 'car')
 
 # Give a few negative examples and a name for the custom concept.
-clarifai.negative('http://example.com/not-a-car.jpg', 'car');
+clarifai.negative('http://example.com/not-a-car.jpg', 'car')
 
 # Train the platform to learn your custom concept.
-clarifai.train('car');
+clarifai.train('car')
 
 # Ask for a prediction on a new image with your custom concept.
-result = clarifai.predict('http://example.com/a-new-car.jpg', 'car');
+result = clarifai.predict('http://example.com/a-new-car.jpg', 'car')
 
 # Get the confidence that this image is a car.
 confidence = result['urls'][0]['score']
