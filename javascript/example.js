@@ -4,14 +4,15 @@ var clarifai;
 function init(){
     clarifai = new Clarifai(
         {
-            'accessToken': 'YOUR_ACCESS_TOKEN'
+            'clientId': 'YOUR_CLIENT_ID',
+            'clientSecret': 'YOUR_CLIENT_SECRET'
         }
     );
 }
 
 // send a 'positive' url
 function positive(){
-    clarifai.positive('http://thephunion.com/wp-content/uploads/2013/04/Umphreys.jpg', 'phish', cb).then(
+    clarifai.positive(phishPositives[0], 'phish', cb).then(
         promiseResolved,
         promiseRejected 
     );
@@ -19,7 +20,7 @@ function positive(){
 
 // send a 'negative' url
 function negative(){
-    clarifai.negative('http://www.mediaspin.com/joel/grateful_dead230582_15-52.jpg', 'phish', cb).then(
+    clarifai.negative(phishNegatives[0], 'phish', cb).then(
         promiseResolved,
         promiseRejected 
     );
