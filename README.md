@@ -7,7 +7,7 @@ We are thrilled to offer you early access to the Clarifai Custom Model Training 
 
 ## Signup
 
-Before you begin, please make sure to sign up for an account. We have a special dedicated signup page for hackathons. If you didn't recieve the link to access it for your particular event, please find us onsite or email us at hackers@clarifai.com.
+Before you begin, please make sure to sign up for an account. **We have a special dedicated signup page for hackathons with extra free stuff!** If you didn't recieve the link to access it for your particular event, please find us onsite or email us at hackers@clarifai.com.
 
 ###OktoberHackFest 2015
 https://developer-alpha.clarifai.com/signup/ohf2015
