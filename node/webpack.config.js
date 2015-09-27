@@ -8,7 +8,9 @@ module.exports = {
   output: {
     path: './build',
     filename: '[name].js',
-    sourceMapFilename: '[file].map'
+    sourceMapFilename: '[file].map',
+    libraryTarget: 'umd',
+    library: 'Clarifai'
   },
   module: {
     loaders: [{

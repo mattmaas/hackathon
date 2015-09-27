@@ -1,4 +1,14 @@
-/******/ (function(modules) { // webpackBootstrap
+(function webpackUniversalModuleDefinition(root, factory) {
+	if(typeof exports === 'object' && typeof module === 'object')
+		module.exports = factory(require("http"), require("https"), require("net"), require("util"), require("events"), require("tls"), require("buffer"), require("stream"), require("url"), require("querystring"), require("path"), require("fs"), require("zlib"), require("punycode"));
+	else if(typeof define === 'function' && define.amd)
+		define(["http", "https", "net", "util", "events", "tls", "buffer", "stream", "url", "querystring", "path", "fs", "zlib", "punycode"], factory);
+	else if(typeof exports === 'object')
+		exports["Clarifai"] = factory(require("http"), require("https"), require("net"), require("util"), require("events"), require("tls"), require("buffer"), require("stream"), require("url"), require("querystring"), require("path"), require("fs"), require("zlib"), require("punycode"));
+	else
+		root["Clarifai"] = factory(root["http"], root["https"], root["net"], root["util"], root["events"], root["tls"], root["buffer"], root["stream"], root["url"], root["querystring"], root["path"], root["fs"], root["zlib"], root["punycode"]);
+})(this, function(__WEBPACK_EXTERNAL_MODULE_74__, __WEBPACK_EXTERNAL_MODULE_75__, __WEBPACK_EXTERNAL_MODULE_78__, __WEBPACK_EXTERNAL_MODULE_79__, __WEBPACK_EXTERNAL_MODULE_80__, __WEBPACK_EXTERNAL_MODULE_82__, __WEBPACK_EXTERNAL_MODULE_92__, __WEBPACK_EXTERNAL_MODULE_93__, __WEBPACK_EXTERNAL_MODULE_98__, __WEBPACK_EXTERNAL_MODULE_105__, __WEBPACK_EXTERNAL_MODULE_125__, __WEBPACK_EXTERNAL_MODULE_126__, __WEBPACK_EXTERNAL_MODULE_131__, __WEBPACK_EXTERNAL_MODULE_137__) {
+return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
 
@@ -22085,4 +22095,6 @@
 
 
 /***/ }
-/******/ ]);
+/******/ ])
+});
+;
