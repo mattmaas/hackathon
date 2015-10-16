@@ -804,14 +804,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var namespace = _ref8.namespace;
 	      var cname = _ref8.cname;
 
-	      var body = {
-	        namespace: namespace, cname: cname
-	      };
-
 	      return this.execute({
 	        operation: 'create',
 	        method: 'POST',
-	        requestBody: body
+	        requestBody: {
+	          namespace: namespace,
+	          cname: cname
+	        }
 	      }).then(Concept.fromResponse);
 	    }
 	  }, {
@@ -910,9 +909,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	  var text = "";
 	  var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-
 	  for (var i = 0; i < len; i++) text += possible.charAt(Math.floor(Math.random() * possible.length));
-
 	  return text;
 	}
 
@@ -926,7 +923,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    this.collectionId = 'default';
 	    this.namespace = 'default';
 	    this.model = 'general-v1.2';
-	    this.clarifai = new Clarifai(new Oauth2({ id: id, secret: secret, tokenUrl: 'https://api.clarifai.com/v1/token/' }));
+	    this.clarifai = new Clarifai(new Oauth2({ id: id, secret: secret, tokenUrl: 'https://api-alpha.clarifai.com/v1/token/' }));
 
 	    //// try to create collection
 	    this.clarifai.collections.create({ id: this.collectionId })['catch'](function (e) {

@@ -195,9 +195,6 @@ function whichIn(identifiers, item) {
 }
 
 
-
-
-
 var setIfDefined = function(obj, propName, value, chainReturn) {
   if (value !== undefined) {
     obj[propName] = value;
@@ -635,14 +632,13 @@ class ConceptManager extends ResourceManager {
   }
 
   create({ namespace, cname }) {
-    var body = {
-      namespace, cname
-    };
-
     return this.execute({
       operation: 'create',
       method: 'POST',
-      requestBody: body
+      requestBody: {
+        namespace,
+        cname
+      }
     }).then(Concept.fromResponse);
   }
 
@@ -723,15 +719,12 @@ function Clarifai(auth, urlResolver) {
 }
 
 
-function makeid(len=32)
-{
-    var text = "";
-    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-
-    for( var i=0; i < len; i++ )
-        text += possible.charAt(Math.floor(Math.random() * possible.length));
-
-    return text;
+function makeid(len=32) {
+  var text = "";
+  var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  for (var i=0; i < len; i++)
+    text += possible.charAt(Math.floor(Math.random() * possible.length));
+  return text;
 }
 
 export default class ClarifaiBasic {
@@ -739,7 +732,7 @@ export default class ClarifaiBasic {
     this.collectionId = 'default';
     this.namespace = 'default';
     this.model = 'general-v1.2';
-    this.clarifai = new Clarifai(new Oauth2({ id, secret, tokenUrl: 'https://api.clarifai.com/v1/token/' }));
+    this.clarifai = new Clarifai(new Oauth2({ id, secret, tokenUrl: 'https://api-alpha.clarifai.com/v1/token/' }));
 
     //// try to create collection
     this.clarifai.collections.create({id: this.collectionId})
@@ -792,7 +785,7 @@ export default class ClarifaiBasic {
       docid: makeid(),
       media_refs: [
         {
-          url: url,
+          url,
           media_type: "image"
         }
       ],
@@ -801,7 +794,7 @@ export default class ClarifaiBasic {
           namespace: this.namespace,
           annotations: [
             {
-              score: score,
+              score,
               tag: {
                 cname: concept
               }

@@ -1,16 +1,11 @@
 var webpack = require('webpack');
+var merge = require('deepmerge');
 
-module.exports = {
+
+var commonConfig = {
   entry: {
-    'clarifai-basic': './clarifai-basic.js'
+    'clarifai-basic': './clarifai-basic.js',
     //example: './example.js'
-  },
-  output: {
-    path: './build',
-    filename: '[name].js',
-    sourceMapFilename: '[file].map',
-    libraryTarget: 'umd',
-    library: 'Clarifai'
   },
   module: {
     loaders: [{
@@ -27,8 +22,32 @@ module.exports = {
     root: __dirname,
     extensions: ['', '.js', '.jsx']
   },
-  target: 'node',
   plugins: [
-    new webpack.IgnorePlugin(/vertx/),
+    new webpack.IgnorePlugin(/vertx/)
   ]
 };
+
+
+var browserConfig = merge(commonConfig, {
+  output: {
+    path: './build/browser/',
+    filename: '[name].js',
+    sourceMapFilename: '[file].map',
+    library: 'Clarifai'
+  },
+  target: 'web'
+});
+
+var nodeConfig = merge(commonConfig, {
+  output: {
+    path: './build/node/',
+    filename: '[name].js',
+    sourceMapFilename: '[file].map',
+    libraryTarget: 'umd',
+    library: 'Clarifai'
+  },
+  target: 'node'
+});
+
+
+module.exports = [browserConfig, nodeConfig];
