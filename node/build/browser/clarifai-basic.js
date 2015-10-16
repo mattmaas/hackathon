@@ -61,8 +61,8 @@ var Clarifai =
 	  value: true
 	});
 	__webpack_require__(70).polyfill();
-	var request = __webpack_require__(74);
-	var merge = __webpack_require__(97);
+	var request = __webpack_require__(75);
+	var merge = __webpack_require__(98);
 
 	function parseAnnotationSets(annotationSets) {
 	  var tags = {};
@@ -2492,7 +2492,7 @@ var Clarifai =
 	    function lib$es6$promise$asap$$attemptVertx() {
 	      try {
 	        var r = require;
-	        var vertx = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"vertx\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
+	        var vertx = __webpack_require__(73);
 	        lib$es6$promise$asap$$vertxNext = vertx.runOnLoop || vertx.runOnContext;
 	        return lib$es6$promise$asap$$useVertxTimer();
 	      } catch(e) {
@@ -3317,7 +3317,7 @@ var Clarifai =
 	    };
 
 	    /* global define:true module:true window: true */
-	    if ("function" === 'function' && __webpack_require__(73)['amd']) {
+	    if ("function" === 'function' && __webpack_require__(74)['amd']) {
 	      !(__WEBPACK_AMD_DEFINE_RESULT__ = function() { return lib$es6$promise$umd$$ES6Promise; }.call(exports, __webpack_require__, exports, module), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 	    } else if (typeof module !== 'undefined' && module['exports']) {
 	      module['exports'] = lib$es6$promise$umd$$ES6Promise;
@@ -3448,16 +3448,22 @@ var Clarifai =
 /* 73 */
 /***/ function(module, exports) {
 
+	/* (ignored) */
+
+/***/ },
+/* 74 */
+/***/ function(module, exports) {
+
 	module.exports = function() { throw new Error("define cannot be used indirect"); };
 
 
 /***/ },
-/* 74 */
+/* 75 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var common_1 = __webpack_require__(75);
-	var index_1 = __webpack_require__(86);
-	var get_headers_1 = __webpack_require__(96);
+	var common_1 = __webpack_require__(76);
+	var index_1 = __webpack_require__(87);
+	var get_headers_1 = __webpack_require__(97);
 	function open(request) {
 	    return new Promise(function (resolve, reject) {
 	        var url = request.fullUrl();
@@ -3533,16 +3539,16 @@ var Clarifai =
 	//# sourceMappingURL=browser.js.map
 
 /***/ },
-/* 75 */
+/* 76 */
 /***/ function(module, exports, __webpack_require__) {
 
-	/* WEBPACK VAR INJECTION */(function(process) {var extend = __webpack_require__(76);
-	var methods = __webpack_require__(77);
-	var request_1 = __webpack_require__(79);
-	var response_1 = __webpack_require__(85);
-	var plugins = __webpack_require__(86);
-	var form_1 = __webpack_require__(93);
-	var jar_1 = __webpack_require__(94);
+	/* WEBPACK VAR INJECTION */(function(process) {var extend = __webpack_require__(77);
+	var methods = __webpack_require__(78);
+	var request_1 = __webpack_require__(80);
+	var response_1 = __webpack_require__(86);
+	var plugins = __webpack_require__(87);
+	var form_1 = __webpack_require__(94);
+	var jar_1 = __webpack_require__(95);
 	if (typeof Promise === 'undefined') {
 	    var context = typeof window === 'object' ? 'window' : 'global';
 	    var message = (context + ".Promise is undefined and must be polyfilled. ") +
@@ -3585,7 +3591,7 @@ var Clarifai =
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(71)))
 
 /***/ },
-/* 76 */
+/* 77 */
 /***/ function(module, exports) {
 
 	module.exports = extend
@@ -3608,11 +3614,11 @@ var Clarifai =
 
 
 /***/ },
-/* 77 */
+/* 78 */
 /***/ function(module, exports, __webpack_require__) {
 
 	
-	var http = __webpack_require__(78);
+	var http = __webpack_require__(79);
 
 	/* istanbul ignore next: implementation differs on version */
 	if (http.METHODS) {
@@ -3656,13 +3662,13 @@ var Clarifai =
 
 
 /***/ },
-/* 78 */
+/* 79 */
 /***/ function(module, exports) {
 
 	/* (ignored) */
 
 /***/ },
-/* 79 */
+/* 80 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {var __extends = (this && this.__extends) || function (d, b) {
@@ -3670,10 +3676,10 @@ var Clarifai =
 	    function __() { this.constructor = d; }
 	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 	};
-	var arrify = __webpack_require__(80);
-	var extend = __webpack_require__(76);
-	var base_1 = __webpack_require__(81);
-	var response_1 = __webpack_require__(85);
+	var arrify = __webpack_require__(81);
+	var extend = __webpack_require__(77);
+	var base_1 = __webpack_require__(82);
+	var response_1 = __webpack_require__(86);
 	var Request = (function (_super) {
 	    __extends(Request, _super);
 	    function Request(options) {
@@ -3920,7 +3926,7 @@ var Clarifai =
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(71)))
 
 /***/ },
-/* 80 */
+/* 81 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -3934,12 +3940,12 @@ var Clarifai =
 
 
 /***/ },
-/* 81 */
+/* 82 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var arrify = __webpack_require__(80);
-	var querystring_1 = __webpack_require__(82);
-	var extend = __webpack_require__(76);
+	var arrify = __webpack_require__(81);
+	var querystring_1 = __webpack_require__(83);
+	var extend = __webpack_require__(77);
 	function lowerHeader(key) {
 	    var lower = key.toLowerCase();
 	    if (lower === 'referrer') {
@@ -4041,17 +4047,17 @@ var Clarifai =
 	//# sourceMappingURL=base.js.map
 
 /***/ },
-/* 82 */
+/* 83 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	exports.decode = exports.parse = __webpack_require__(83);
-	exports.encode = exports.stringify = __webpack_require__(84);
+	exports.decode = exports.parse = __webpack_require__(84);
+	exports.encode = exports.stringify = __webpack_require__(85);
 
 
 /***/ },
-/* 83 */
+/* 84 */
 /***/ function(module, exports) {
 
 	// Copyright Joyent, Inc. and other Node contributors.
@@ -4141,7 +4147,7 @@ var Clarifai =
 
 
 /***/ },
-/* 84 */
+/* 85 */
 /***/ function(module, exports) {
 
 	// Copyright Joyent, Inc. and other Node contributors.
@@ -4232,7 +4238,7 @@ var Clarifai =
 
 
 /***/ },
-/* 85 */
+/* 86 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __extends = (this && this.__extends) || function (d, b) {
@@ -4240,7 +4246,7 @@ var Clarifai =
 	    function __() { this.constructor = d; }
 	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 	};
-	var base_1 = __webpack_require__(81);
+	var base_1 = __webpack_require__(82);
 	var Response = (function (_super) {
 	    __extends(Response, _super);
 	    function Response(options) {
@@ -4269,24 +4275,24 @@ var Clarifai =
 	//# sourceMappingURL=response.js.map
 
 /***/ },
-/* 86 */
+/* 87 */
 /***/ function(module, exports, __webpack_require__) {
 
 	function __export(m) {
 	    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
 	}
-	__export(__webpack_require__(87));
-	var common_2 = __webpack_require__(87);
+	__export(__webpack_require__(88));
+	var common_2 = __webpack_require__(88);
 	exports.defaults = [common_2.stringify, common_2.headers, common_2.parse];
 	//# sourceMappingURL=browser.js.map
 
 /***/ },
-/* 87 */
+/* 88 */
 /***/ function(module, exports, __webpack_require__) {
 
-	/* WEBPACK VAR INJECTION */(function(process, Buffer) {var FormData = __webpack_require__(92);
-	var querystring_1 = __webpack_require__(82);
-	var form_1 = __webpack_require__(93);
+	/* WEBPACK VAR INJECTION */(function(process, Buffer) {var FormData = __webpack_require__(93);
+	var querystring_1 = __webpack_require__(83);
+	var form_1 = __webpack_require__(94);
 	var JSON_MIME_REGEXP = /^application\/(?:[\w!#\$%&\*`\-\.\^~]*\+)?json$/i;
 	var QUERY_MIME_REGEXP = /^application\/x-www-form-urlencoded$/i;
 	var FORM_MIME_REGEXP = /^multipart\/form-data$/i;
@@ -4383,10 +4389,10 @@ var Clarifai =
 	}
 	exports.parse = parse;
 	//# sourceMappingURL=common.js.map
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(71), __webpack_require__(88).Buffer))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(71), __webpack_require__(89).Buffer))
 
 /***/ },
-/* 88 */
+/* 89 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(Buffer, global) {/*!
@@ -4397,9 +4403,9 @@ var Clarifai =
 	 */
 	/* eslint-disable no-proto */
 
-	var base64 = __webpack_require__(89)
-	var ieee754 = __webpack_require__(90)
-	var isArray = __webpack_require__(91)
+	var base64 = __webpack_require__(90)
+	var ieee754 = __webpack_require__(91)
+	var isArray = __webpack_require__(92)
 
 	exports.Buffer = Buffer
 	exports.SlowBuffer = SlowBuffer
@@ -5932,10 +5938,10 @@ var Clarifai =
 	  return i
 	}
 
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(88).Buffer, (function() { return this; }())))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(89).Buffer, (function() { return this; }())))
 
 /***/ },
-/* 89 */
+/* 90 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var lookup = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
@@ -6065,7 +6071,7 @@ var Clarifai =
 
 
 /***/ },
-/* 90 */
+/* 91 */
 /***/ function(module, exports) {
 
 	exports.read = function (buffer, offset, isLE, mLen, nBytes) {
@@ -6155,7 +6161,7 @@ var Clarifai =
 
 
 /***/ },
-/* 91 */
+/* 92 */
 /***/ function(module, exports) {
 
 	
@@ -6194,17 +6200,17 @@ var Clarifai =
 
 
 /***/ },
-/* 92 */
+/* 93 */
 /***/ function(module, exports) {
 
 	module.exports = FormData;
 	//# sourceMappingURL=form-data.js.map
 
 /***/ },
-/* 93 */
+/* 94 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var FormData = __webpack_require__(92);
+	var FormData = __webpack_require__(93);
 	function form(obj) {
 	    var form = new FormData();
 	    if (obj) {
@@ -6219,10 +6225,10 @@ var Clarifai =
 	//# sourceMappingURL=form.js.map
 
 /***/ },
-/* 94 */
+/* 95 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var tough_cookie_1 = __webpack_require__(95);
+	var tough_cookie_1 = __webpack_require__(96);
 	function cookieJar(store) {
 	    return new tough_cookie_1.CookieJar(store);
 	}
@@ -6231,7 +6237,7 @@ var Clarifai =
 	//# sourceMappingURL=jar.js.map
 
 /***/ },
-/* 95 */
+/* 96 */
 /***/ function(module, exports) {
 
 	module.exports = function ToughCookie() {
@@ -6240,7 +6246,7 @@ var Clarifai =
 	//# sourceMappingURL=tough-cookie.js.map
 
 /***/ },
-/* 96 */
+/* 97 */
 /***/ function(module, exports) {
 
 	function parse(value) {
@@ -6304,7 +6310,7 @@ var Clarifai =
 	//# sourceMappingURL=index.js.map
 
 /***/ },
-/* 97 */
+/* 98 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;(function (root, factory) {

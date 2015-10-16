@@ -4,7 +4,7 @@ var merge = require('deepmerge');
 
 var commonConfig = {
   entry: {
-    'clarifai-basic': './clarifai-basic.js',
+    'clarifai-basic': './clarifai-basic.js'
     //example: './example.js'
   },
   module: {
@@ -21,10 +21,10 @@ var commonConfig = {
   resolve: {
     root: __dirname,
     extensions: ['', '.js', '.jsx']
-  },
-  plugins: [
-    new webpack.IgnorePlugin(/vertx/)
-  ]
+  }
+  //plugins: [
+  //  new webpack.IgnorePlugin(/vertx/)
+  //]
 };
 
 
@@ -33,6 +33,7 @@ var browserConfig = merge(commonConfig, {
     path: './build/browser/',
     filename: '[name].js',
     sourceMapFilename: '[file].map',
+    libraryTarget: 'var',
     library: 'Clarifai'
   },
   target: 'web'
@@ -46,7 +47,14 @@ var nodeConfig = merge(commonConfig, {
     libraryTarget: 'umd',
     library: 'Clarifai'
   },
-  target: 'node'
+  target: 'node',
+  externals: [
+    "deepmerge",
+    "es6-promise",
+    "popsicle",
+    "vertex",
+    "form-data"
+  ]
 });
 
 
