@@ -3,6 +3,7 @@
 require('es6-promise').polyfill();
 var request = require('popsicle');
 var merge = require('deepmerge');
+var md5 = require('blueimp-md5');
 
 function parseAnnotationSets(annotationSets) {
   var tags = {};
@@ -361,6 +362,7 @@ var curatorAPIResolver = new UrlResolver({
     collectionList: "collections",
     documentDetail: "collections/<collectionId>/documents/<documentId>",
     documentList: "collections/<collectionId>/documents",
+    annotation: "collections/<collectionId>/documents/<documentId>/annotations",
     concept: "concepts/<namespace>/<cname>",
     concepts: "concepts",
     conceptTrain: "concepts/<namespace>/<cname>/train",
@@ -585,6 +587,104 @@ class DocumentManager extends ResourceManager {
       return makeDocuments(resp, collectionId);
     });
   }
+}
+
+class AnnotationManager extends ResourceManager {
+  routeFor(operation, params) {
+    return this.urlResolver.routeFor('annotation', {
+      documentId: params.documentId || this.documentId,
+      collectionId: params.collectionId || this.collectionId
+    });
+  }
+
+  add({ collectionId, documentId, annotations, namespace, annotation_set }) {
+    return this.execute({
+      operation: 'add',
+      method: 'PUT',
+      urlParams: {
+        documentId,
+        collectionId
+      },
+      requestBody: {
+        annotation_set: this.toAnnotationSet({ annotations, namespace, annotation_set })
+      }
+    });
+  }
+
+  /**
+   * Expects either annotations and namespace or annotation_set
+   */
+  remove({ collectionId, documentId, annotations, namespace, annotation_set, userId }) {
+    var annotation_set = this.toAnnotationSet({ annotations, namespace, annotation_set });
+    for (var i = 0; i < annotation_set.annotations.length; i++) {
+      var annotation = annotation_set.annotations[i];
+      if (!('status' in annotation)) annotation.status = {};
+      annotation.status.is_deleted = true;
+      if (userId !== undefined) annotation.status.user_id = userId;
+    }
+
+    return this.execute({
+      operation: 'delete',
+      method: 'DELETE',
+      urlParams: {
+        documentId,
+        collectionId
+      },
+      requestBody: {
+        annotation_set: annotation_set
+      }
+    });
+  }
+
+
+  undoRemove({ collectionId, documentId, annotations, namespace, annotation_set, userId }) {
+    var annotation_set = this.toAnnotationSet({ annotations, namespace, annotation_set });
+    for (var i = 0; i < annotation_set.annotations.length; i++) {
+      var annotation = annotation_set.annotations[i];
+      if (!('status' in annotation)) annotation.status = {};
+      annotation.status.is_deleted = false;
+      if (userId !== undefined) annotation.status.user_id = userId;
+    }
+
+    return this.execute({
+      operation: 'delete',
+      method: 'DELETE',
+      urlParams: {
+        documentId,
+        collectionId
+      },
+      requestBody: {
+        annotation_set: annotation_set
+      }
+    });
+  }
+
+  toAnnotation(argsObj) {
+    if (typeof argsObj === "string") {
+      return {tag: {cname: argsObj}};
+    } else if ('text' in argsObj) {
+      var a = {tag: {cname: argsObj.text}};
+      if ('score' in argsObj) a.score = argsObj.score;
+      if ('user' in argsObj) a.user_id = argsObj.user;
+      return a;
+    }
+  }
+
+  toAnnotationSet(args) {
+    var annotation_set = {};
+    if (args.annotation_set !== undefined) {
+      annotation_set = args.annotation_set
+    } else if ('annotations' in args && 'namespace' in args) {
+      annotation_set.namespace = args.namespace;
+      annotation_set.annotations = args.annotations.map(this.toAnnotation.bind(this));
+      if ('userId' in args) {
+        for (var i = 0; i < annotation_set.annotations.length; i++) {
+          annotation_set.annotations[i]['user_id'] = args.userId;
+        }
+      }
+    }
+    return annotation_set;
+  }
 
 }
 
@@ -716,16 +816,9 @@ function Clarifai(auth, urlResolver) {
   this.collections = new CollectionManager(argsObj);
   this.documents = new DocumentManager(argsObj);
   this.concepts = new ConceptManager(argsObj);
+  this.annotations = new AnnotationManager(argsObj);
 }
 
-
-function makeid(len=32) {
-  var text = "";
-  var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-  for (var i=0; i < len; i++)
-    text += possible.charAt(Math.floor(Math.random() * possible.length));
-  return text;
-}
 
 export default class ClarifaiBasic {
   constructor({ id, secret }) {
@@ -736,22 +829,36 @@ export default class ClarifaiBasic {
 
     //// try to create collection
     this.clarifai.collections.create({id: this.collectionId})
-      .catch(e => console.log('collection already exists'));
+      .catch(e => console.log('collection already exists, no need to create it again'));
   }
 
   negative(url, concept) {
+    var doc = this.formatDoc(url, concept, -1);
     return this.clarifai.documents.create({
       collectionId: this.collectionId,
-      document: this.formatDoc(url, concept, -1),
+      document: doc,
       options: this.formatOptions()
+    }).catch(e => this.clarifai.annotations.add({
+      collectionId: this.collectionId,
+      documentId: doc.docid,
+      annotationSet: doc.annotation_sets[0]
+    })).catch(e => {
+      throw Error('Could not add example, there might be something wrong with the url')
     })
   }
 
   positive(url, concept) {
+    var doc = this.formatDoc(url, concept, 1);
     return this.clarifai.documents.create({
       collectionId: this.collectionId,
-      document: this.formatDoc(url, concept, 1),
+      document: doc,
       options: this.formatOptions()
+    }).catch(e => this.clarifai.annotations.add({
+      collectionId: this.collectionId,
+      documentId: doc.docid,
+      annotationSet: doc.annotation_sets[0]
+    })).catch(e => {
+      throw Error('Could not add example, there might be something wrong with the url')
     })
   }
 
@@ -782,7 +889,7 @@ export default class ClarifaiBasic {
 
   formatDoc(url, concept, score) {
     return {
-      docid: makeid(),
+      docid: md5(url),
       media_refs: [
         {
           url,

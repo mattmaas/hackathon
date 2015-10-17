@@ -53,7 +53,8 @@ var nodeConfig = merge(commonConfig, {
     "es6-promise",
     "popsicle",
     "vertex",
-    "form-data"
+    "form-data",
+    "blueimp-md5"
   ]
 });
 

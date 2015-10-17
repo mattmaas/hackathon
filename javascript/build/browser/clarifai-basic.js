@@ -63,6 +63,7 @@ var Clarifai =
 	__webpack_require__(70).polyfill();
 	var request = __webpack_require__(75);
 	var merge = __webpack_require__(98);
+	var md5 = __webpack_require__(99);
 
 	function parseAnnotationSets(annotationSets) {
 	  var tags = {};
@@ -420,6 +421,7 @@ var Clarifai =
 	    collectionList: "collections",
 	    documentDetail: "collections/<collectionId>/documents/<documentId>",
 	    documentList: "collections/<collectionId>/documents",
+	    annotation: "collections/<collectionId>/documents/<documentId>/annotations",
 	    concept: "concepts/<namespace>/<cname>",
 	    concepts: "concepts",
 	    conceptTrain: "concepts/<namespace>/<cname>/train",
@@ -720,10 +722,148 @@ var Clarifai =
 	  return DocumentManager;
 	})(ResourceManager);
 
+	var AnnotationManager = (function (_ResourceManager3) {
+	  _inherits(AnnotationManager, _ResourceManager3);
+
+	  function AnnotationManager() {
+	    _classCallCheck(this, AnnotationManager);
+
+	    _get(Object.getPrototypeOf(AnnotationManager.prototype), 'constructor', this).apply(this, arguments);
+	  }
+
+	  _createClass(AnnotationManager, [{
+	    key: 'routeFor',
+	    value: function routeFor(operation, params) {
+	      return this.urlResolver.routeFor('annotation', {
+	        documentId: params.documentId || this.documentId,
+	        collectionId: params.collectionId || this.collectionId
+	      });
+	    }
+	  }, {
+	    key: 'add',
+	    value: function add(_ref7) {
+	      var collectionId = _ref7.collectionId;
+	      var documentId = _ref7.documentId;
+	      var annotations = _ref7.annotations;
+	      var namespace = _ref7.namespace;
+	      var annotation_set = _ref7.annotation_set;
+
+	      return this.execute({
+	        operation: 'add',
+	        method: 'PUT',
+	        urlParams: {
+	          documentId: documentId,
+	          collectionId: collectionId
+	        },
+	        requestBody: {
+	          annotation_set: this.toAnnotationSet({ annotations: annotations, namespace: namespace, annotation_set: annotation_set })
+	        }
+	      });
+	    }
+
+	    /**
+	     * Expects either annotations and namespace or annotation_set
+	     */
+	  }, {
+	    key: 'remove',
+	    value: function remove(_ref8) {
+	      var collectionId = _ref8.collectionId;
+	      var documentId = _ref8.documentId;
+	      var annotations = _ref8.annotations;
+	      var namespace = _ref8.namespace;
+	      var annotation_set = _ref8.annotation_set;
+	      var userId = _ref8.userId;
+	      return (function () {
+	        var annotation_set = this.toAnnotationSet({ annotations: annotations, namespace: namespace, annotation_set: annotation_set });
+	        for (var i = 0; i < annotation_set.annotations.length; i++) {
+	          var annotation = annotation_set.annotations[i];
+	          if (!('status' in annotation)) annotation.status = {};
+	          annotation.status.is_deleted = true;
+	          if (userId !== undefined) annotation.status.user_id = userId;
+	        }
+
+	        return this.execute({
+	          operation: 'delete',
+	          method: 'DELETE',
+	          urlParams: {
+	            documentId: documentId,
+	            collectionId: collectionId
+	          },
+	          requestBody: {
+	            annotation_set: annotation_set
+	          }
+	        });
+	      }).apply(this, arguments);
+	    }
+	  }, {
+	    key: 'undoRemove',
+	    value: function undoRemove(_ref9) {
+	      var collectionId = _ref9.collectionId;
+	      var documentId = _ref9.documentId;
+	      var annotations = _ref9.annotations;
+	      var namespace = _ref9.namespace;
+	      var annotation_set = _ref9.annotation_set;
+	      var userId = _ref9.userId;
+	      return (function () {
+	        var annotation_set = this.toAnnotationSet({ annotations: annotations, namespace: namespace, annotation_set: annotation_set });
+	        for (var i = 0; i < annotation_set.annotations.length; i++) {
+	          var annotation = annotation_set.annotations[i];
+	          if (!('status' in annotation)) annotation.status = {};
+	          annotation.status.is_deleted = false;
+	          if (userId !== undefined) annotation.status.user_id = userId;
+	        }
+
+	        return this.execute({
+	          operation: 'delete',
+	          method: 'DELETE',
+	          urlParams: {
+	            documentId: documentId,
+	            collectionId: collectionId
+	          },
+	          requestBody: {
+	            annotation_set: annotation_set
+	          }
+	        });
+	      }).apply(this, arguments);
+	    }
+	  }, {
+	    key: 'toAnnotation',
+	    value: function toAnnotation(argsObj) {
+	      if (typeof argsObj === "string") {
+	        return { tag: { cname: argsObj } };
+	      } else if ('text' in argsObj) {
+	        var a = { tag: { cname: argsObj.text } };
+	        if ('score' in argsObj) a.score = argsObj.score;
+	        if ('user' in argsObj) a.user_id = argsObj.user;
+	        return a;
+	      }
+	    }
+	  }, {
+	    key: 'toAnnotationSet',
+	    value: function toAnnotationSet(args) {
+	      var annotation_set = {};
+	      if (args.annotation_set !== undefined) {
+	        annotation_set = args.annotation_set;
+	      } else if ('annotations' in args && 'namespace' in args) {
+	        annotation_set.namespace = args.namespace;
+	        annotation_set.annotations = args.annotations.map(this.toAnnotation.bind(this));
+	        if ('userId' in args) {
+	          for (var i = 0; i < annotation_set.annotations.length; i++) {
+	            annotation_set.annotations[i]['user_id'] = args.userId;
+	          }
+	        }
+	      }
+	      return annotation_set;
+	    }
+	  }]);
+
+	  return AnnotationManager;
+	})(ResourceManager);
+
 	var Concept = (function () {
-	  function Concept(_ref7) {
-	    var namespace = _ref7.namespace;
-	    var cname = _ref7.cname;
+	  function Concept(_ref10) {
+	    var namespace = _ref10.namespace;
+	    var cname = _ref10.cname;
 
 	    _classCallCheck(this, Concept);
 
@@ -745,8 +885,8 @@ var Clarifai =
 	  return Concept;
 	})();
 
-	var ConceptManager = (function (_ResourceManager3) {
-	  _inherits(ConceptManager, _ResourceManager3);
+	var ConceptManager = (function (_ResourceManager4) {
+	  _inherits(ConceptManager, _ResourceManager4);
 
 	  function ConceptManager() {
 	    _classCallCheck(this, ConceptManager);
@@ -791,9 +931,9 @@ var Clarifai =
 	    }
 	  }, {
 	    key: 'create',
-	    value: function create(_ref8) {
-	      var namespace = _ref8.namespace;
-	      var cname = _ref8.cname;
+	    value: function create(_ref11) {
+	      var namespace = _ref11.namespace;
+	      var cname = _ref11.cname;
 
 	      return this.execute({
 	        operation: 'create',
@@ -806,9 +946,9 @@ var Clarifai =
 	    }
 	  }, {
 	    key: 'retrieve',
-	    value: function retrieve(_ref9) {
-	      var namespace = _ref9.namespace;
-	      var cname = _ref9.cname;
+	    value: function retrieve(_ref12) {
+	      var namespace = _ref12.namespace;
+	      var cname = _ref12.cname;
 
 	      return this.execute({
 	        operation: 'retrieve',
@@ -831,9 +971,9 @@ var Clarifai =
 	    }
 	  }, {
 	    key: 'remove',
-	    value: function remove(_ref10) {
-	      var namespace = _ref10.namespace;
-	      var cname = _ref10.cname;
+	    value: function remove(_ref13) {
+	      var namespace = _ref13.namespace;
+	      var cname = _ref13.cname;
 
 	      return this.execute({
 	        operation: 'delete',
@@ -846,9 +986,9 @@ var Clarifai =
 	    }
 	  }, {
 	    key: 'train',
-	    value: function train(_ref11) {
-	      var namespace = _ref11.namespace;
-	      var cname = _ref11.cname;
+	    value: function train(_ref14) {
+	      var namespace = _ref14.namespace;
+	      var cname = _ref14.cname;
 
 	      return this.execute({
 	        operation: 'train',
@@ -861,11 +1001,11 @@ var Clarifai =
 	    }
 	  }, {
 	    key: 'predict',
-	    value: function predict(_ref12) {
-	      var namespace = _ref12.namespace;
-	      var cname = _ref12.cname;
-	      var urls = _ref12.urls;
-	      var url = _ref12.url;
+	    value: function predict(_ref15) {
+	      var namespace = _ref15.namespace;
+	      var cname = _ref15.cname;
+	      var urls = _ref15.urls;
+	      var url = _ref15.url;
 
 	      return this.execute({
 	        operation: 'predict',
@@ -893,21 +1033,13 @@ var Clarifai =
 	  this.collections = new CollectionManager(argsObj);
 	  this.documents = new DocumentManager(argsObj);
 	  this.concepts = new ConceptManager(argsObj);
-	}
-
-	function makeid() {
-	  var len = arguments.length <= 0 || arguments[0] === undefined ? 32 : arguments[0];
-
-	  var text = "";
-	  var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-	  for (var i = 0; i < len; i++) text += possible.charAt(Math.floor(Math.random() * possible.length));
-	  return text;
+	  this.annotations = new AnnotationManager(argsObj);
 	}
 
 	var ClarifaiBasic = (function () {
-	  function ClarifaiBasic(_ref13) {
-	    var id = _ref13.id;
-	    var secret = _ref13.secret;
+	  function ClarifaiBasic(_ref16) {
+	    var id = _ref16.id;
+	    var secret = _ref16.secret;
 
 	    _classCallCheck(this, ClarifaiBasic);
 
@@ -918,26 +1050,48 @@ var Clarifai =
 
 	    //// try to create collection
 	    this.clarifai.collections.create({ id: this.collectionId })['catch'](function (e) {
-	      return console.log('collection already exists');
+	      return console.log('collection already exists, no need to create it again');
 	    });
 	  }
 
 	  _createClass(ClarifaiBasic, [{
 	    key: 'negative',
 	    value: function negative(url, concept) {
+	      var _this2 = this;
+
+	      var doc = this.formatDoc(url, concept, -1);
 	      return this.clarifai.documents.create({
 	        collectionId: this.collectionId,
-	        document: this.formatDoc(url, concept, -1),
+	        document: doc,
 	        options: this.formatOptions()
+	      })['catch'](function (e) {
+	        return _this2.clarifai.annotations.add({
+	          collectionId: _this2.collectionId,
+	          documentId: doc.docid,
+	          annotationSet: doc.annotation_sets[0]
+	        });
+	      })['catch'](function (e) {
+	        throw Error('Could not add example, there might be something wrong with the url');
 	      });
 	    }
 	  }, {
 	    key: 'positive',
 	    value: function positive(url, concept) {
+	      var _this3 = this;
+
+	      var doc = this.formatDoc(url, concept, 1);
 	      return this.clarifai.documents.create({
 	        collectionId: this.collectionId,
-	        document: this.formatDoc(url, concept, 1),
+	        document: doc,
 	        options: this.formatOptions()
+	      })['catch'](function (e) {
+	        return _this3.clarifai.annotations.add({
+	          collectionId: _this3.collectionId,
+	          documentId: doc.docid,
+	          annotationSet: doc.annotation_sets[0]
+	        });
+	      })['catch'](function (e) {
+	        throw Error('Could not add example, there might be something wrong with the url');
 	      });
 	    }
 	  }, {
@@ -971,7 +1125,7 @@ var Clarifai =
 	    key: 'formatDoc',
 	    value: function formatDoc(url, concept, score) {
 	      return {
-	        docid: makeid(),
+	        docid: md5(url),
 	        media_refs: [{
 	          url: url,
 	          media_type: "image"
@@ -6365,6 +6519,286 @@ var Clarifai =
 	}
 
 	}));
+
+
+/***/ },
+/* 99 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __WEBPACK_AMD_DEFINE_RESULT__;/*
+	 * JavaScript MD5 1.0.1
+	 * https://github.com/blueimp/JavaScript-MD5
+	 *
+	 * Copyright 2011, Sebastian Tschan
+	 * https://blueimp.net
+	 *
+	 * Licensed under the MIT license:
+	 * http://www.opensource.org/licenses/MIT
+	 * 
+	 * Based on
+	 * A JavaScript implementation of the RSA Data Security, Inc. MD5 Message
+	 * Digest Algorithm, as defined in RFC 1321.
+	 * Version 2.2 Copyright (C) Paul Johnston 1999 - 2009
+	 * Other contributors: Greg Holt, Andrew Kepert, Ydnar, Lostinet
+	 * Distributed under the BSD License
+	 * See http://pajhome.org.uk/crypt/md5 for more info.
+	 */
+
+	/*jslint bitwise: true */
+	/*global unescape, define */
+
+	(function ($) {
+	    'use strict';
+
+	    /*
+	    * Add integers, wrapping at 2^32. This uses 16-bit operations internally
+	    * to work around bugs in some JS interpreters.
+	    */
+	    function safe_add(x, y) {
+	        var lsw = (x & 0xFFFF) + (y & 0xFFFF),
+	            msw = (x >> 16) + (y >> 16) + (lsw >> 16);
+	        return (msw << 16) | (lsw & 0xFFFF);
+	    }
+
+	    /*
+	    * Bitwise rotate a 32-bit number to the left.
+	    */
+	    function bit_rol(num, cnt) {
+	        return (num << cnt) | (num >>> (32 - cnt));
+	    }
+
+	    /*
+	    * These functions implement the four basic operations the algorithm uses.
+	    */
+	    function md5_cmn(q, a, b, x, s, t) {
+	        return safe_add(bit_rol(safe_add(safe_add(a, q), safe_add(x, t)), s), b);
+	    }
+	    function md5_ff(a, b, c, d, x, s, t) {
+	        return md5_cmn((b & c) | ((~b) & d), a, b, x, s, t);
+	    }
+	    function md5_gg(a, b, c, d, x, s, t) {
+	        return md5_cmn((b & d) | (c & (~d)), a, b, x, s, t);
+	    }
+	    function md5_hh(a, b, c, d, x, s, t) {
+	        return md5_cmn(b ^ c ^ d, a, b, x, s, t);
+	    }
+	    function md5_ii(a, b, c, d, x, s, t) {
+	        return md5_cmn(c ^ (b | (~d)), a, b, x, s, t);
+	    }
+
+	    /*
+	    * Calculate the MD5 of an array of little-endian words, and a bit length.
+	    */
+	    function binl_md5(x, len) {
+	        /* append padding */
+	        x[len >> 5] |= 0x80 << (len % 32);
+	        x[(((len + 64) >>> 9) << 4) + 14] = len;
+
+	        var i, olda, oldb, oldc, oldd,
+	            a =  1732584193,
+	            b = -271733879,
+	            c = -1732584194,
+	            d =  271733878;
+
+	        for (i = 0; i < x.length; i += 16) {
+	            olda = a;
+	            oldb = b;
+	            oldc = c;
+	            oldd = d;
+
+	            a = md5_ff(a, b, c, d, x[i],       7, -680876936);
+	            d = md5_ff(d, a, b, c, x[i +  1], 12, -389564586);
+	            c = md5_ff(c, d, a, b, x[i +  2], 17,  606105819);
+	            b = md5_ff(b, c, d, a, x[i +  3], 22, -1044525330);
+	            a = md5_ff(a, b, c, d, x[i +  4],  7, -176418897);
+	            d = md5_ff(d, a, b, c, x[i +  5], 12,  1200080426);
+	            c = md5_ff(c, d, a, b, x[i +  6], 17, -1473231341);
+	            b = md5_ff(b, c, d, a, x[i +  7], 22, -45705983);
+	            a = md5_ff(a, b, c, d, x[i +  8],  7,  1770035416);
+	            d = md5_ff(d, a, b, c, x[i +  9], 12, -1958414417);
+	            c = md5_ff(c, d, a, b, x[i + 10], 17, -42063);
+	            b = md5_ff(b, c, d, a, x[i + 11], 22, -1990404162);
+	            a = md5_ff(a, b, c, d, x[i + 12],  7,  1804603682);
+	            d = md5_ff(d, a, b, c, x[i + 13], 12, -40341101);
+	            c = md5_ff(c, d, a, b, x[i + 14], 17, -1502002290);
+	            b = md5_ff(b, c, d, a, x[i + 15], 22,  1236535329);
+
+	            a = md5_gg(a, b, c, d, x[i +  1],  5, -165796510);
+	            d = md5_gg(d, a, b, c, x[i +  6],  9, -1069501632);
+	            c = md5_gg(c, d, a, b, x[i + 11], 14,  643717713);
+	            b = md5_gg(b, c, d, a, x[i],      20, -373897302);
+	            a = md5_gg(a, b, c, d, x[i +  5],  5, -701558691);
+	            d = md5_gg(d, a, b, c, x[i + 10],  9,  38016083);
+	            c = md5_gg(c, d, a, b, x[i + 15], 14, -660478335);
+	            b = md5_gg(b, c, d, a, x[i +  4], 20, -405537848);
+	            a = md5_gg(a, b, c, d, x[i +  9],  5,  568446438);
+	            d = md5_gg(d, a, b, c, x[i + 14],  9, -1019803690);
+	            c = md5_gg(c, d, a, b, x[i +  3], 14, -187363961);
+	            b = md5_gg(b, c, d, a, x[i +  8], 20,  1163531501);
+	            a = md5_gg(a, b, c, d, x[i + 13],  5, -1444681467);
+	            d = md5_gg(d, a, b, c, x[i +  2],  9, -51403784);
+	            c = md5_gg(c, d, a, b, x[i +  7], 14,  1735328473);
+	            b = md5_gg(b, c, d, a, x[i + 12], 20, -1926607734);
+
+	            a = md5_hh(a, b, c, d, x[i +  5],  4, -378558);
+	            d = md5_hh(d, a, b, c, x[i +  8], 11, -2022574463);
+	            c = md5_hh(c, d, a, b, x[i + 11], 16,  1839030562);
+	            b = md5_hh(b, c, d, a, x[i + 14], 23, -35309556);
+	            a = md5_hh(a, b, c, d, x[i +  1],  4, -1530992060);
+	            d = md5_hh(d, a, b, c, x[i +  4], 11,  1272893353);
+	            c = md5_hh(c, d, a, b, x[i +  7], 16, -155497632);
+	            b = md5_hh(b, c, d, a, x[i + 10], 23, -1094730640);
+	            a = md5_hh(a, b, c, d, x[i + 13],  4,  681279174);
+	            d = md5_hh(d, a, b, c, x[i],      11, -358537222);
+	            c = md5_hh(c, d, a, b, x[i +  3], 16, -722521979);
+	            b = md5_hh(b, c, d, a, x[i +  6], 23,  76029189);
+	            a = md5_hh(a, b, c, d, x[i +  9],  4, -640364487);
+	            d = md5_hh(d, a, b, c, x[i + 12], 11, -421815835);
+	            c = md5_hh(c, d, a, b, x[i + 15], 16,  530742520);
+	            b = md5_hh(b, c, d, a, x[i +  2], 23, -995338651);
+
+	            a = md5_ii(a, b, c, d, x[i],       6, -198630844);
+	            d = md5_ii(d, a, b, c, x[i +  7], 10,  1126891415);
+	            c = md5_ii(c, d, a, b, x[i + 14], 15, -1416354905);
+	            b = md5_ii(b, c, d, a, x[i +  5], 21, -57434055);
+	            a = md5_ii(a, b, c, d, x[i + 12],  6,  1700485571);
+	            d = md5_ii(d, a, b, c, x[i +  3], 10, -1894986606);
+	            c = md5_ii(c, d, a, b, x[i + 10], 15, -1051523);
+	            b = md5_ii(b, c, d, a, x[i +  1], 21, -2054922799);
+	            a = md5_ii(a, b, c, d, x[i +  8],  6,  1873313359);
+	            d = md5_ii(d, a, b, c, x[i + 15], 10, -30611744);
+	            c = md5_ii(c, d, a, b, x[i +  6], 15, -1560198380);
+	            b = md5_ii(b, c, d, a, x[i + 13], 21,  1309151649);
+	            a = md5_ii(a, b, c, d, x[i +  4],  6, -145523070);
+	            d = md5_ii(d, a, b, c, x[i + 11], 10, -1120210379);
+	            c = md5_ii(c, d, a, b, x[i +  2], 15,  718787259);
+	            b = md5_ii(b, c, d, a, x[i +  9], 21, -343485551);
+
+	            a = safe_add(a, olda);
+	            b = safe_add(b, oldb);
+	            c = safe_add(c, oldc);
+	            d = safe_add(d, oldd);
+	        }
+	        return [a, b, c, d];
+	    }
+
+	    /*
+	    * Convert an array of little-endian words to a string
+	    */
+	    function binl2rstr(input) {
+	        var i,
+	            output = '';
+	        for (i = 0; i < input.length * 32; i += 8) {
+	            output += String.fromCharCode((input[i >> 5] >>> (i % 32)) & 0xFF);
+	        }
+	        return output;
+	    }
+
+	    /*
+	    * Convert a raw string to an array of little-endian words
+	    * Characters >255 have their high-byte silently ignored.
+	    */
+	    function rstr2binl(input) {
+	        var i,
+	            output = [];
+	        output[(input.length >> 2) - 1] = undefined;
+	        for (i = 0; i < output.length; i += 1) {
+	            output[i] = 0;
+	        }
+	        for (i = 0; i < input.length * 8; i += 8) {
+	            output[i >> 5] |= (input.charCodeAt(i / 8) & 0xFF) << (i % 32);
+	        }
+	        return output;
+	    }
+
+	    /*
+	    * Calculate the MD5 of a raw string
+	    */
+	    function rstr_md5(s) {
+	        return binl2rstr(binl_md5(rstr2binl(s), s.length * 8));
+	    }
+
+	    /*
+	    * Calculate the HMAC-MD5, of a key and some data (raw strings)
+	    */
+	    function rstr_hmac_md5(key, data) {
+	        var i,
+	            bkey = rstr2binl(key),
+	            ipad = [],
+	            opad = [],
+	            hash;
+	        ipad[15] = opad[15] = undefined;
+	        if (bkey.length > 16) {
+	            bkey = binl_md5(bkey, key.length * 8);
+	        }
+	        for (i = 0; i < 16; i += 1) {
+	            ipad[i] = bkey[i] ^ 0x36363636;
+	            opad[i] = bkey[i] ^ 0x5C5C5C5C;
+	        }
+	        hash = binl_md5(ipad.concat(rstr2binl(data)), 512 + data.length * 8);
+	        return binl2rstr(binl_md5(opad.concat(hash), 512 + 128));
+	    }
+
+	    /*
+	    * Convert a raw string to a hex string
+	    */
+	    function rstr2hex(input) {
+	        var hex_tab = '0123456789abcdef',
+	            output = '',
+	            x,
+	            i;
+	        for (i = 0; i < input.length; i += 1) {
+	            x = input.charCodeAt(i);
+	            output += hex_tab.charAt((x >>> 4) & 0x0F) +
+	                hex_tab.charAt(x & 0x0F);
+	        }
+	        return output;
+	    }
+
+	    /*
+	    * Encode a string as utf-8
+	    */
+	    function str2rstr_utf8(input) {
+	        return unescape(encodeURIComponent(input));
+	    }
+
+	    /*
+	    * Take string arguments and return either raw or hex encoded strings
+	    */
+	    function raw_md5(s) {
+	        return rstr_md5(str2rstr_utf8(s));
+	    }
+	    function hex_md5(s) {
+	        return rstr2hex(raw_md5(s));
+	    }
+	    function raw_hmac_md5(k, d) {
+	        return rstr_hmac_md5(str2rstr_utf8(k), str2rstr_utf8(d));
+	    }
+	    function hex_hmac_md5(k, d) {
+	        return rstr2hex(raw_hmac_md5(k, d));
+	    }
+
+	    function md5(string, key, raw) {
+	        if (!key) {
+	            if (!raw) {
+	                return hex_md5(string);
+	            }
+	            return raw_md5(string);
+	        }
+	        if (!raw) {
+	            return hex_hmac_md5(key, string);
+	        }
+	        return raw_hmac_md5(key, string);
+	    }
+
+	    if (true) {
+	        !(__WEBPACK_AMD_DEFINE_RESULT__ = function () {
+	            return md5;
+	        }.call(exports, __webpack_require__, exports, module), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+	    } else {
+	        $.md5 = md5;
+	    }
+	}(this));
 
 
 /***/ }

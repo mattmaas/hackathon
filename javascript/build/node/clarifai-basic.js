@@ -1,13 +1,13 @@
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
-		module.exports = factory(require("es6-promise"), require("popsicle"), require("deepmerge"));
+		module.exports = factory(require("es6-promise"), require("popsicle"), require("deepmerge"), require("blueimp-md5"));
 	else if(typeof define === 'function' && define.amd)
-		define(["es6-promise", "popsicle", "deepmerge"], factory);
+		define(["es6-promise", "popsicle", "deepmerge", "blueimp-md5"], factory);
 	else if(typeof exports === 'object')
-		exports["Clarifai"] = factory(require("es6-promise"), require("popsicle"), require("deepmerge"));
+		exports["Clarifai"] = factory(require("es6-promise"), require("popsicle"), require("deepmerge"), require("blueimp-md5"));
 	else
-		root["Clarifai"] = factory(root["es6-promise"], root["popsicle"], root["deepmerge"]);
-})(this, function(__WEBPACK_EXTERNAL_MODULE_70__, __WEBPACK_EXTERNAL_MODULE_71__, __WEBPACK_EXTERNAL_MODULE_72__) {
+		root["Clarifai"] = factory(root["es6-promise"], root["popsicle"], root["deepmerge"], root["blueimp-md5"]);
+})(this, function(__WEBPACK_EXTERNAL_MODULE_70__, __WEBPACK_EXTERNAL_MODULE_71__, __WEBPACK_EXTERNAL_MODULE_72__, __WEBPACK_EXTERNAL_MODULE_73__) {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -72,6 +72,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	__webpack_require__(70).polyfill();
 	var request = __webpack_require__(71);
 	var merge = __webpack_require__(72);
+	var md5 = __webpack_require__(73);
 
 	function parseAnnotationSets(annotationSets) {
 	  var tags = {};
@@ -429,6 +430,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    collectionList: "collections",
 	    documentDetail: "collections/<collectionId>/documents/<documentId>",
 	    documentList: "collections/<collectionId>/documents",
+	    annotation: "collections/<collectionId>/documents/<documentId>/annotations",
 	    concept: "concepts/<namespace>/<cname>",
 	    concepts: "concepts",
 	    conceptTrain: "concepts/<namespace>/<cname>/train",
@@ -729,10 +731,148 @@ return /******/ (function(modules) { // webpackBootstrap
 	  return DocumentManager;
 	})(ResourceManager);
 
+	var AnnotationManager = (function (_ResourceManager3) {
+	  _inherits(AnnotationManager, _ResourceManager3);
+
+	  function AnnotationManager() {
+	    _classCallCheck(this, AnnotationManager);
+
+	    _get(Object.getPrototypeOf(AnnotationManager.prototype), 'constructor', this).apply(this, arguments);
+	  }
+
+	  _createClass(AnnotationManager, [{
+	    key: 'routeFor',
+	    value: function routeFor(operation, params) {
+	      return this.urlResolver.routeFor('annotation', {
+	        documentId: params.documentId || this.documentId,
+	        collectionId: params.collectionId || this.collectionId
+	      });
+	    }
+	  }, {
+	    key: 'add',
+	    value: function add(_ref7) {
+	      var collectionId = _ref7.collectionId;
+	      var documentId = _ref7.documentId;
+	      var annotations = _ref7.annotations;
+	      var namespace = _ref7.namespace;
+	      var annotation_set = _ref7.annotation_set;
+
+	      return this.execute({
+	        operation: 'add',
+	        method: 'PUT',
+	        urlParams: {
+	          documentId: documentId,
+	          collectionId: collectionId
+	        },
+	        requestBody: {
+	          annotation_set: this.toAnnotationSet({ annotations: annotations, namespace: namespace, annotation_set: annotation_set })
+	        }
+	      });
+	    }
+
+	    /**
+	     * Expects either annotations and namespace or annotation_set
+	     */
+	  }, {
+	    key: 'remove',
+	    value: function remove(_ref8) {
+	      var collectionId = _ref8.collectionId;
+	      var documentId = _ref8.documentId;
+	      var annotations = _ref8.annotations;
+	      var namespace = _ref8.namespace;
+	      var annotation_set = _ref8.annotation_set;
+	      var userId = _ref8.userId;
+	      return (function () {
+	        var annotation_set = this.toAnnotationSet({ annotations: annotations, namespace: namespace, annotation_set: annotation_set });
+	        for (var i = 0; i < annotation_set.annotations.length; i++) {
+	          var annotation = annotation_set.annotations[i];
+	          if (!('status' in annotation)) annotation.status = {};
+	          annotation.status.is_deleted = true;
+	          if (userId !== undefined) annotation.status.user_id = userId;
+	        }
+
+	        return this.execute({
+	          operation: 'delete',
+	          method: 'DELETE',
+	          urlParams: {
+	            documentId: documentId,
+	            collectionId: collectionId
+	          },
+	          requestBody: {
+	            annotation_set: annotation_set
+	          }
+	        });
+	      }).apply(this, arguments);
+	    }
+	  }, {
+	    key: 'undoRemove',
+	    value: function undoRemove(_ref9) {
+	      var collectionId = _ref9.collectionId;
+	      var documentId = _ref9.documentId;
+	      var annotations = _ref9.annotations;
+	      var namespace = _ref9.namespace;
+	      var annotation_set = _ref9.annotation_set;
+	      var userId = _ref9.userId;
+	      return (function () {
+	        var annotation_set = this.toAnnotationSet({ annotations: annotations, namespace: namespace, annotation_set: annotation_set });
+	        for (var i = 0; i < annotation_set.annotations.length; i++) {
+	          var annotation = annotation_set.annotations[i];
+	          if (!('status' in annotation)) annotation.status = {};
+	          annotation.status.is_deleted = false;
+	          if (userId !== undefined) annotation.status.user_id = userId;
+	        }
+
+	        return this.execute({
+	          operation: 'delete',
+	          method: 'DELETE',
+	          urlParams: {
+	            documentId: documentId,
+	            collectionId: collectionId
+	          },
+	          requestBody: {
+	            annotation_set: annotation_set
+	          }
+	        });
+	      }).apply(this, arguments);
+	    }
+	  }, {
+	    key: 'toAnnotation',
+	    value: function toAnnotation(argsObj) {
+	      if (typeof argsObj === "string") {
+	        return { tag: { cname: argsObj } };
+	      } else if ('text' in argsObj) {
+	        var a = { tag: { cname: argsObj.text } };
+	        if ('score' in argsObj) a.score = argsObj.score;
+	        if ('user' in argsObj) a.user_id = argsObj.user;
+	        return a;
+	      }
+	    }
+	  }, {
+	    key: 'toAnnotationSet',
+	    value: function toAnnotationSet(args) {
+	      var annotation_set = {};
+	      if (args.annotation_set !== undefined) {
+	        annotation_set = args.annotation_set;
+	      } else if ('annotations' in args && 'namespace' in args) {
+	        annotation_set.namespace = args.namespace;
+	        annotation_set.annotations = args.annotations.map(this.toAnnotation.bind(this));
+	        if ('userId' in args) {
+	          for (var i = 0; i < annotation_set.annotations.length; i++) {
+	            annotation_set.annotations[i]['user_id'] = args.userId;
+	          }
+	        }
+	      }
+	      return annotation_set;
+	    }
+	  }]);
+
+	  return AnnotationManager;
+	})(ResourceManager);
+
 	var Concept = (function () {
-	  function Concept(_ref7) {
-	    var namespace = _ref7.namespace;
-	    var cname = _ref7.cname;
+	  function Concept(_ref10) {
+	    var namespace = _ref10.namespace;
+	    var cname = _ref10.cname;
 
 	    _classCallCheck(this, Concept);
 
@@ -754,8 +894,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	  return Concept;
 	})();
 
-	var ConceptManager = (function (_ResourceManager3) {
-	  _inherits(ConceptManager, _ResourceManager3);
+	var ConceptManager = (function (_ResourceManager4) {
+	  _inherits(ConceptManager, _ResourceManager4);
 
 	  function ConceptManager() {
 	    _classCallCheck(this, ConceptManager);
@@ -800,9 +940,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	  }, {
 	    key: 'create',
-	    value: function create(_ref8) {
-	      var namespace = _ref8.namespace;
-	      var cname = _ref8.cname;
+	    value: function create(_ref11) {
+	      var namespace = _ref11.namespace;
+	      var cname = _ref11.cname;
 
 	      return this.execute({
 	        operation: 'create',
@@ -815,9 +955,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	  }, {
 	    key: 'retrieve',
-	    value: function retrieve(_ref9) {
-	      var namespace = _ref9.namespace;
-	      var cname = _ref9.cname;
+	    value: function retrieve(_ref12) {
+	      var namespace = _ref12.namespace;
+	      var cname = _ref12.cname;
 
 	      return this.execute({
 	        operation: 'retrieve',
@@ -840,9 +980,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	  }, {
 	    key: 'remove',
-	    value: function remove(_ref10) {
-	      var namespace = _ref10.namespace;
-	      var cname = _ref10.cname;
+	    value: function remove(_ref13) {
+	      var namespace = _ref13.namespace;
+	      var cname = _ref13.cname;
 
 	      return this.execute({
 	        operation: 'delete',
@@ -855,9 +995,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	  }, {
 	    key: 'train',
-	    value: function train(_ref11) {
-	      var namespace = _ref11.namespace;
-	      var cname = _ref11.cname;
+	    value: function train(_ref14) {
+	      var namespace = _ref14.namespace;
+	      var cname = _ref14.cname;
 
 	      return this.execute({
 	        operation: 'train',
@@ -870,11 +1010,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	  }, {
 	    key: 'predict',
-	    value: function predict(_ref12) {
-	      var namespace = _ref12.namespace;
-	      var cname = _ref12.cname;
-	      var urls = _ref12.urls;
-	      var url = _ref12.url;
+	    value: function predict(_ref15) {
+	      var namespace = _ref15.namespace;
+	      var cname = _ref15.cname;
+	      var urls = _ref15.urls;
+	      var url = _ref15.url;
 
 	      return this.execute({
 	        operation: 'predict',
@@ -902,21 +1042,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	  this.collections = new CollectionManager(argsObj);
 	  this.documents = new DocumentManager(argsObj);
 	  this.concepts = new ConceptManager(argsObj);
-	}
-
-	function makeid() {
-	  var len = arguments.length <= 0 || arguments[0] === undefined ? 32 : arguments[0];
-
-	  var text = "";
-	  var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-	  for (var i = 0; i < len; i++) text += possible.charAt(Math.floor(Math.random() * possible.length));
-	  return text;
+	  this.annotations = new AnnotationManager(argsObj);
 	}
 
 	var ClarifaiBasic = (function () {
-	  function ClarifaiBasic(_ref13) {
-	    var id = _ref13.id;
-	    var secret = _ref13.secret;
+	  function ClarifaiBasic(_ref16) {
+	    var id = _ref16.id;
+	    var secret = _ref16.secret;
 
 	    _classCallCheck(this, ClarifaiBasic);
 
@@ -927,26 +1059,48 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    //// try to create collection
 	    this.clarifai.collections.create({ id: this.collectionId })['catch'](function (e) {
-	      return console.log('collection already exists');
+	      return console.log('collection already exists, no need to create it again');
 	    });
 	  }
 
 	  _createClass(ClarifaiBasic, [{
 	    key: 'negative',
 	    value: function negative(url, concept) {
+	      var _this2 = this;
+
+	      var doc = this.formatDoc(url, concept, -1);
 	      return this.clarifai.documents.create({
 	        collectionId: this.collectionId,
-	        document: this.formatDoc(url, concept, -1),
+	        document: doc,
 	        options: this.formatOptions()
+	      })['catch'](function (e) {
+	        return _this2.clarifai.annotations.add({
+	          collectionId: _this2.collectionId,
+	          documentId: doc.docid,
+	          annotationSet: doc.annotation_sets[0]
+	        });
+	      })['catch'](function (e) {
+	        throw Error('Could not add example, there might be something wrong with the url');
 	      });
 	    }
 	  }, {
 	    key: 'positive',
 	    value: function positive(url, concept) {
+	      var _this3 = this;
+
+	      var doc = this.formatDoc(url, concept, 1);
 	      return this.clarifai.documents.create({
 	        collectionId: this.collectionId,
-	        document: this.formatDoc(url, concept, 1),
+	        document: doc,
 	        options: this.formatOptions()
+	      })['catch'](function (e) {
+	        return _this3.clarifai.annotations.add({
+	          collectionId: _this3.collectionId,
+	          documentId: doc.docid,
+	          annotationSet: doc.annotation_sets[0]
+	        });
+	      })['catch'](function (e) {
+	        throw Error('Could not add example, there might be something wrong with the url');
 	      });
 	    }
 	  }, {
@@ -980,7 +1134,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    key: 'formatDoc',
 	    value: function formatDoc(url, concept, score) {
 	      return {
-	        docid: makeid(),
+	        docid: md5(url),
 	        media_refs: [{
 	          url: url,
 	          media_type: "image"
@@ -2383,6 +2537,12 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports) {
 
 	module.exports = __WEBPACK_EXTERNAL_MODULE_72__;
+
+/***/ },
+/* 73 */
+/***/ function(module, exports) {
+
+	module.exports = __WEBPACK_EXTERNAL_MODULE_73__;
 
 /***/ }
 /******/ ])
