@@ -829,7 +829,7 @@ export default class ClarifaiBasic {
 
     //// try to create collection
     this.clarifai.collections.create({id: this.collectionId})
-      .catch(e => console.log('collection already exists, no need to create it again'));
+      .catch(e => undefined);
   }
 
   negative(url, concept) {
