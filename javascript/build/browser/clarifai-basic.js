@@ -267,7 +267,7 @@ var Clarifai =
 	    this.setAuth(args.auth);
 	  }
 
-	  this.maxAttempts = args.maxAttempts || 3;
+	  this.maxAttempts = args.maxAttempts || 1;
 	  this.backoffTime = args.backoffTime || 200;
 
 	  var _this = this;
@@ -317,7 +317,7 @@ var Clarifai =
 	  var _this = this;
 	  return this.performRequest(requestObj).then(this.verifyResponse.bind(this)) // verify response might turn it into an error
 	  ['catch'](function (error) {
-	    if (maxAttempts < numAttempts) {
+	    if (maxAttempts <= numAttempts) {
 	      return _Promise.reject(error);
 	    }
 
@@ -428,7 +428,8 @@ var Clarifai =
 	    conceptPredict: "concepts/<namespace>/<cname>/predict",
 	    conceptExamples: "concepts/<namespace>/<cname>/examples",
 	    model: "models/<modelId>",
-	    models: "models"
+	    models: "models",
+	    tag: "tag"
 	  }
 	});
 
@@ -1050,7 +1051,7 @@ var Clarifai =
 
 	    //// try to create collection
 	    this.clarifai.collections.create({ id: this.collectionId })['catch'](function (e) {
-	      return console.log('collection already exists, no need to create it again');
+	      return undefined;
 	    });
 	  }
 
@@ -1140,6 +1141,17 @@ var Clarifai =
 	          }]
 	        }]
 	      };
+	    }
+	  }, {
+	    key: 'tag',
+	    value: function tag(url) {
+	      return this.clarifai.requestHandler.request({
+	        url: 'https://api.clarifai.com/v1/tag',
+	        method: 'POST',
+	        body: {
+	          url: url
+	        }
+	      });
 	    }
 	  }]);
 

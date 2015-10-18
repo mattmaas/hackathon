@@ -211,7 +211,7 @@ function RequestHandler(args) {
     this.setAuth(args.auth);
   }
 
-  this.maxAttempts = args.maxAttempts || 3;
+  this.maxAttempts = args.maxAttempts || 1;
   this.backoffTime = args.backoffTime || 200;
 
   var _this = this;
@@ -258,7 +258,7 @@ RequestHandler.prototype._request = function _request(requestObj, numAttempts, m
   return this.performRequest(requestObj)
     .then(this.verifyResponse.bind(this))  // verify response might turn it into an error
     .catch(function(error) {
-      if (maxAttempts < numAttempts) { return Promise.reject(error); }
+      if (maxAttempts <= numAttempts) { return Promise.reject(error); }
 
       return _this.handleError(error, requestObj)
         .then(function(requestObj) {
@@ -369,7 +369,8 @@ var curatorAPIResolver = new UrlResolver({
     conceptPredict: "concepts/<namespace>/<cname>/predict",
     conceptExamples: "concepts/<namespace>/<cname>/examples",
     model: "models/<modelId>",
-    models: "models"
+    models: "models",
+    tag: "tag"
   }
 });
 
@@ -910,6 +911,16 @@ export default class ClarifaiBasic {
         }
       ]
     };
+  }
+
+  tag(url) {
+    return this.clarifai.requestHandler.request({
+      url: 'https://api.clarifai.com/v1/tag',
+      method: 'POST',
+      body: {
+        url
+      }
+    })
   }
 }
 
