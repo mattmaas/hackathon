@@ -1187,8 +1187,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	  }, {
 	    key: 'tag',
-	    value: function tag(obj) {
+	    value: function tag(obj, classes) {
 	      var body = isUrl(obj) ? { url: obj } : { encoded_data: stripHeader(obj) };
+	      if (classes) {
+	        this.body.select_classes = classes;
+	      }
 	      return this.clarifai.requestHandler.request({
 	        url: 'https://api.clarifai.com/v1/tag',
 	        method: 'POST',
