@@ -111,7 +111,8 @@ Putting it all together:
 // instantiate a new Clarifai object
 var clarifai = new Clarifai(
   {
-    'accessToken': YOUR_ACCESS_TOKEN
+    'clientId': 'YOUR_CLIENT_ID',
+    'clientSecret': 'YOUR_CLIENT_SECRET' 
   }
 );
 
