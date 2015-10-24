@@ -163,34 +163,34 @@ install the Clarifai API Python client. You don't need to get an Access Token
 from the developer site, the API will retrieve one for you as long as you set
 your environment variables.
 
-<pre>
+```bash
 pip install git+git://github.com/Clarifai/clarifai-python.git
-export CLARIFAI_APP_ID=&lt;an_application_id_from_your_account&gt;
-export CLARIFAI_APP_SECRET=&lt;an_application_secret_from_your_account&gt;
-</pre>
+export CLARIFAI_APP_ID=<an_application_id_from_your_account>
+export CLARIFAI_APP_SECRET=<an_application_secret_from_your_account>
+```
 
 Next, get the Clarifai Custom Model API and example script `example.py`.
 
-<pre>
+```bash
 git clone https://github.com/Clarifai/hackathon.git
 cd hackathon
-</pre>
+```
 
 #### Run example.py
 
-<pre>
+```bash
 cd python
 python example.py
-</pre>
+```
 
 If everything is set up properly, you'll see the following output. We'll explain what's going on next.
 
-<pre>
+```bash
 Success 0.797 http://phishthoughts.com/wp-content/uploads/2012/07/photo-1-11-e1342391144673.jpg
 Success 0.706 http://bobmarley.cdn.junip.com/wp-content/uploads/2014/10/DSC01226-e1311293061704.jpg
 Success 0.356 http://farm3.static.flickr.com/2161/2141620332_2b741028b3.jpg
 Success 0.273 http://www.mediaspin.com/joel/grateful_dead230582_15-52.jpg
-</pre>
+```
 
 Instantiate a ClarifaiCustomModel object. This is your custom **Concept**:
 
