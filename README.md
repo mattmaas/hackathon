@@ -40,6 +40,8 @@ The basic workflow to create a custom **Concept** is:
 3. Explicitly tell the platform to **Train** on those images.
 4. Send a new image and ask the platform to **Predict** whether is contains your custom concept or not.
 
+**Note:** Your custom concepts cannot have a single character name, like `a` for example.
+
 ## Examples
 
 A JavaScript example is shown in the next section. There's a Python example below.
@@ -161,31 +163,34 @@ install the Clarifai API Python client. You don't need to get an Access Token
 from the developer site, the API will retrieve one for you as long as you set
 your environment variables.
 
-<pre>
+```bash
 pip install git+git://github.com/Clarifai/clarifai-python.git
-export CLARIFAI_APP_ID=&lt;an_application_id_from_your_account&gt;
-export CLARIFAI_APP_SECRET=&lt;an_application_secret_from_your_account&gt;
-</pre>
+export CLARIFAI_APP_ID=<an_application_id_from_your_account>
+export CLARIFAI_APP_SECRET=<an_application_secret_from_your_account>
+```
 
 Next, get the Clarifai Custom Model API and example script `example.py`.
 
-<pre>
-git clone git@github.com:Clarifai/hackathon
+```bash
+git clone https://github.com/Clarifai/hackathon.git
 cd hackathon
-</pre>
-
-**Note:** If you get an "unauthorized" error, try `git clone https://github.com/Clarifai/hackathon.git` instead of the above. Otherwise, ignore this.
+```
 
 #### Run example.py
 
+```bash
+cd python
+python example.py
+```
+
 If everything is set up properly, you'll see the following output. We'll explain what's going on next.
 
-<pre>
+```bash
 Success 0.797 http://phishthoughts.com/wp-content/uploads/2012/07/photo-1-11-e1342391144673.jpg
 Success 0.706 http://bobmarley.cdn.junip.com/wp-content/uploads/2014/10/DSC01226-e1311293061704.jpg
 Success 0.356 http://farm3.static.flickr.com/2161/2141620332_2b741028b3.jpg
 Success 0.273 http://www.mediaspin.com/joel/grateful_dead230582_15-52.jpg
-</pre>
+```
 
 Instantiate a ClarifaiCustomModel object. This is your custom **Concept**:
 
