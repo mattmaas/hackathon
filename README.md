@@ -40,6 +40,8 @@ The basic workflow to create a custom **Concept** is:
 3. Explicitly tell the platform to **Train** on those images.
 4. Send a new image and ask the platform to **Predict** whether is contains your custom concept or not.
 
+**Note:** Your custom concepts cannot have a single character name, like `a` for example.
+
 ## Examples
 
 A JavaScript example is shown in the next section. There's a Python example below.
@@ -170,13 +172,16 @@ export CLARIFAI_APP_SECRET=&lt;an_application_secret_from_your_account&gt;
 Next, get the Clarifai Custom Model API and example script `example.py`.
 
 <pre>
-git clone git@github.com:Clarifai/hackathon
+git clone https://github.com/Clarifai/hackathon.git
 cd hackathon
 </pre>
 
-**Note:** If you get an "unauthorized" error, try `git clone https://github.com/Clarifai/hackathon.git` instead of the above. Otherwise, ignore this.
-
 #### Run example.py
+
+<pre>
+cd python
+python example.py
+</pre>
 
 If everything is set up properly, you'll see the following output. We'll explain what's going on next.
 
