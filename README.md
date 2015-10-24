@@ -174,6 +174,8 @@ git clone git@github.com:Clarifai/hackathon
 cd hackathon
 </pre>
 
+**Note:** If you get an "unauthorized" error, try `git clone git@github.com:Clarifai/hackathon` instead of the above. Otherwise, ignore this.
+
 #### Run example.py
 
 If everything is set up properly, you'll see the following output. We'll explain what's going on next.
