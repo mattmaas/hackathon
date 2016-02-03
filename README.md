@@ -3,6 +3,8 @@
 
 We are thrilled to offer you early access to the new Clarifai Developer Hub! 
 
+The preview URL is located at: http://newdocs.clarifai.com
+
 > Note: The new developer hub is being actively worked on and is subject to change.
 
 ## Signup
