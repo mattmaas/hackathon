@@ -18,7 +18,7 @@ please find us onsite or email us at hackers@clarifai.com.
 Our new developer hub is located at http://newdocs.clarifai.com. This is just a preview and the final URL 
 will change. 
 
-## New Functionality
+## New Functionality - ALPHA!
 
 ### NSFW Model
 
