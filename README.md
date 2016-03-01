@@ -3,7 +3,7 @@
 
 We are thrilled to offer you early access to the new Clarifai Developer Hub! 
 
-The preview URL is located at: http://newdocs.clarifai.com
+Our NEW developer site is located here: https://developer.clarifai.com/
 
 > Note: The new developer hub is being actively worked on and is subject to change.
 
@@ -15,17 +15,16 @@ please find us onsite or email us at hackers@clarifai.com.
 
 ## Developer Hub
 
-Our new developer hub is located at http://newdocs.clarifai.com. This is just a preview and the final URL 
-will change. 
+Our new developer hub is located at https://developer.clarifai.com/.
 
-## New Functionality - ALPHA!
+## New Functionality - Beta!
 
 ### NSFW Model
 
 The 'Not Safe For Work' model analyzes images and videos and returns probability scores on the likelihood 
 that the image or video contains pornography.
 
-Learn more: http://newdocs.clarifai.com/guide/tag#nsfw
+Learn more: https://developer.clarifai.com/guide/tag#nsfw
 
 ### Color 
 
@@ -33,7 +32,7 @@ The color endpoint is used to retrieve the dominant colors present in your image
 returned in the hex format. A density value is also returned to let you know how much of the color is 
 present. In addition, colors are also mapped to their closest W3C counterparts.
 
-Learn more: http://newdocs.clarifai.com/guide/color#color
+Learn more: https://developer.clarifai.com/guide/color#color
 
 
 ## Help
